@@ -1,0 +1,21 @@
+{
+    "name": "sap/Odatalib",
+    "description": "Odata clent library",
+    "license": "MIT",
+    "keywords": ["odata"],
+    "authors": [
+        {
+            "name": "V.Yuntsevich",
+            "email": "none@none.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "4.0.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sap\\Odatalib\\": "src"
+        }
+    }
+}
