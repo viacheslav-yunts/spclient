@@ -1,6 +1,9 @@
 <?php
 namespace Sap\Odatalib;
 
+/**
+* 
+*/
 class Odatalib 
 {
 
