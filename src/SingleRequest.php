@@ -316,9 +316,4 @@ class SingleRequest implements IRequest
     }
     
     
-    
-    public function execute()
-    {
-        return false;
-    }
 }
