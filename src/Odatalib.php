@@ -7,9 +7,11 @@ namespace Sap\Odatalib;
 class Odatalib 
 {
 
-    public function hasCheese($bool = true)
+    /**
+    * выполнить запрос
+    */
+    public function execute()
     {
-        return $bool;
+        return true;
     }
-
 }
