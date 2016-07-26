@@ -49,7 +49,9 @@ class Odatalib
     private function _createHttpRequest()
     {
         if (! is_null($this->getRequest())) {
-            
+            $this->_http_request = new HttpRequest(
+                $this->getRequest(), $this->getConfig()
+            );
         }
     }
 }

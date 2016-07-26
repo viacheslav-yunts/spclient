@@ -1,9 +1,8 @@
 <?php
-namespace \Sap\Odatalib;
+namespace Sap\Odatalib;
 
 
-use \Sap\Odatalib\IRequest;
-
+use Sap\Odatalib\IRequest;
 class BatchRequest implements IRequest
 {
     public function create()
