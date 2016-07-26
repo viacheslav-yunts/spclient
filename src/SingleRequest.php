@@ -18,28 +18,7 @@ class SingleRequest implements IRequest
         $this->_url = $url;
         $this->_config = $config;
     }
-  
-    /**
-    * clear data for query
-    */
-    public function clearData()
-    {
-        $this->systemQueryOptions = array(              '$expand' => array(),
-                                                        '$filter' => '',
-                                                        '$format' => ODATA_DEFAULT_FORMAT,
-                                                        '$inlinecount' => array(),
-                                                        '$orderby' => array(),
-                                                        '$select'  => array(),
-                                                        '$skip'    => '',
-                                                        '$top'     => '',
-                                                        '$skiptoken' => ''
-                                                 );
-        $this->_other = array();
-        $this->_req_type = ODATA_TRANSFER_TYPE;
-    }
-  
-  
-    
+
     /**
     * function setUrl
     *                                                         
@@ -133,7 +112,7 @@ class SingleRequest implements IRequest
     * @param mixed $header_name
     * @param mixed $header_value
     */
-    public function AddHeaderOption( $header_name, $header_value )
+    public function AddHeaderOption($header_name, $header_value)
     {
         $this->_headers[ $header_name ] =  $header_value;
     }
@@ -145,7 +124,7 @@ class SingleRequest implements IRequest
     */
     public function getHeaderOption()
     {
-        return $this->_headers; 
+        return $this->_headers;
     }
  
     /**
@@ -340,6 +319,6 @@ class SingleRequest implements IRequest
     
     public function execute()
     {
-        
+        return false;
     }
 }
