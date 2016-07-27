@@ -14,8 +14,20 @@ class SingleRequest implements IRequest
     private $_request_type = '';
     // заголовки запроса
     private $_headers = array();
+    // параметры урла
+    private $_systemQueryOptions = array(
+                '$expand'       => array(),
+                '$filter'       => '',
+                '$format'       => 'json',
+                '$inlinecount'  => array(),
+                '$orderby'      => array(),
+                '$select'       => array(),
+                '$skip'         => '',
+                '$top'          => '',
+                '$skiptoken'    => ''
+    );
     // запрос
-    private $_body = false;
+    private $_body = array();
     
     public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET')
     {
@@ -98,7 +110,7 @@ class SingleRequest implements IRequest
 
         } else {
 
-            $this->_other[$option] = $value;
+            $this->_body[$option] = $value;
 
         }
     }
