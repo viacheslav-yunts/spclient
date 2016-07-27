@@ -3,6 +3,7 @@ namespace Sap\Odatalib;
 
 
 use Sap\Odatalib\IRequest;
+use Sap\Odatalib\config\BaseSapConfig;
 class SingleRequest implements IRequest
 {
     // вызываемы url    
