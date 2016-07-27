@@ -12,8 +12,9 @@ class Odatalib
     public function createRequest($method_name, $method_request_type = 'GET', $conn_system = ConfigFactory::DEFAULT_SYSTEM, $conn_type = ConfigFactory::DEFAULT_CONNECTION_TYPE, $conn_file_path = '/')
     {
         $odata_connection_config = $this->createConnectionConfig($conn_system, $conn_type, $conn_file_path);
-        echo "<pre>"; print_r($odata_connection_config); die;
-        return new stdClass();
+        //echo "<pre>"; print_r($odata_connection_config); die;
+        
+        return new SingleRequest($method_name, $odata_connection_config, $method_request_type);
     }
     
     /**

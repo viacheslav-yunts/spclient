@@ -9,6 +9,8 @@ class SingleRequest implements IRequest
     private $_url = null;
     // config
     private $_config = null;
+    // req_type
+    private $_request_type = '';
     // заголовки запроса
     private $_headers = false;
     // запрос
@@ -17,6 +19,7 @@ class SingleRequest implements IRequest
     public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET'){
         $this->_url = $url;
         $this->_config = $config;
+        $this->_request_type = $request_type;
     }
 
     /**
