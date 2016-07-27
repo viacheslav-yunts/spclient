@@ -7,7 +7,7 @@
  * @version 1.0
  *
  */
-namespace connection\common;
+namespace Sap\Odatalib\config;
 
 
 abstract class BaseSapConfig implements BaseConfig

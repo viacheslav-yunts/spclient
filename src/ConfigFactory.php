@@ -2,18 +2,14 @@
 /**
  * class ConfigFactory
  *
- * @package connection
+ * @package OdataLib
  * @author Hrynchyshyn Uladzimir
  * @version 1.0
  *
  */
 
-namespace connection;
+namespace Sap\Odatalib;
 
-
-if (!class_exists('\\connection\core\AutoLoader', true)) {
-    require_once 'bootstrap.php';
-}
 
 /**
  * Класс - фабрика для генерации и получения объекта, содержащего информацию из конфигурационных массивов
@@ -105,11 +101,10 @@ class ConfigFactory
     /**
      * ConfigFactory constructor.
      *
-     * @param $environment
      */
-    public function __construct($environment)
+    public function __construct()
     {
-        $this->setEnvironment(strtolower($environment));
+
     }
 
     /**
@@ -120,7 +115,11 @@ class ConfigFactory
      * @return mixed
      * @throws \Exception
      */
-    public function create($system = 'sap', $connectionType = 'default'){
+    public function create($system = 'sap', $connectionType = 'default', $pathToConnectionFolder = null){
+
+        if (is_null($pathToConnectionFolder)) {
+            throw new \Exception('Неопределен путь к конфигурационным файлам');
+        }
 
         $this->setSystem(ucfirst($system));
         $this->setConnectionType(ucfirst($connectionType));
@@ -141,15 +140,19 @@ class ConfigFactory
                 $className = $this->getFullClassName();
 
                 if (class_exists($className)) {
-                    $config = new $className($this->getSystem(), strtolower($this->getConnectionType()), $this->getConfigurationFilePath());
+                    $config = new $className($this->getSystem(), strtolower($this->getConnectionType()),
+                                             $this->getConfigurationFilePath($pathToConnectionFolder));
                     return $config->getConfig();
                 }
             }
         }
 
-        /* В случае не дефолтного типа подключения, или же не прохождения какой-либо вышенаписанной проверки, пытаемся подключиться по default */
+        /* 
+        *  В случае не дефолтного типа подключения, или же не прохождения какой-либо вышенаписанной проверки,
+        *  пытаемся подключиться по default
+        */
         $this->setConnectionType(ucfirst(self::DEFAULT_CONNECTION_TYPE));
-        return $this->createDefault($system, $connectionType);
+        return $this->createDefault($system, $connectionType, $pathToConnectionFolder);
     }
 
     /**
@@ -158,7 +161,8 @@ class ConfigFactory
      * @return mixed
      * @throws \Exception
      */
-    protected function createDefault($system = self::DEFAULT_SYSTEM, $connectionType = self::DEFAULT_CONNECTION_TYPE)
+    protected function createDefault($system = self::DEFAULT_SYSTEM, $connectionType = self::DEFAULT_CONNECTION_TYPE,
+                                     $pathToConnectionFolder = null)
     {
         if (file_exists($this->getFilename())) {
             include_once ($this->getFilename());
@@ -167,7 +171,7 @@ class ConfigFactory
             if (class_exists($className)) {
                 $config = new $className( $this->getSystem($this->setSystem($system)),
                                           strtolower($this->getConnectionType($this->setConnectionType($connectionType))),
-                                          $this->getConfigurationFilePath()
+                                          $this->getConfigurationFilePath($pathToConnectionFolder)
                 );
                 return $config->getConfig();
             } else {
@@ -193,7 +197,7 @@ class ConfigFactory
      */
     protected function getFilename()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'common' . DIRECTORY_SEPARATOR . $this->getSystem() . DIRECTORY_SEPARATOR . $this->getConnectionType() .'Config' . DIRECTORY_SEPARATOR . $this->getConfigClassName() .'.php';
+        return __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $this->getSystem() . DIRECTORY_SEPARATOR . $this->getConnectionType() .'Config' . DIRECTORY_SEPARATOR . $this->getConfigClassName() .'.php';
     }
 
     /**
@@ -202,15 +206,15 @@ class ConfigFactory
      */
     protected function getFullClassName()
     {
-        return __NAMESPACE__ . '\\common\\' . $this->getSystem() . '\\' . $this->getConnectionType() . 'Config\\' . $this->getConfigClassName();
+        return __NAMESPACE__ . '\\config\\' . $this->getSystem() . '\\' . $this->getConnectionType() . 'Config\\' . $this->getConfigClassName();
     }
 
     /**
      * Возвращает динамически генерируемый путь к конфигурационному файлу , который содержит массив с конфигурационными данными
      * @return string
      */
-    protected function getConfigurationFilePath()
+    protected function getConfigurationFilePath($pathToConnectionFolder)
     {
-        return APPPATH . 'config' . DIRECTORY_SEPARATOR . $this->getEnvironment() . DIRECTORY_SEPARATOR . strtolower($this->getSystem()) . '_connections.php';
+        return $pathToConnectionFolder . DIRECTORY_SEPARATOR . strtolower($this->getSystem()) . DIRECTORY_SEPARATOR . 'connections.php';
     }
 }

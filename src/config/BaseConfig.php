@@ -8,7 +8,7 @@
  *
  */
 
-namespace connection\common;
+namespace Sap\Odatalib\config;
 
 
 interface BaseConfig

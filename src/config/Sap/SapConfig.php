@@ -3,10 +3,10 @@
  * Created by Hrynchyshyn.
  */
 
-namespace connection\common\Sap;
+namespace Sap\Odatalib\config\Sap;
 
 
-use connection\common\BaseSapConfig;
+use Sap\Odatalib\config\BaseSapConfig;
 
 class SapConfig extends BaseSapConfig
 {
@@ -38,9 +38,12 @@ class SapConfig extends BaseSapConfig
     {
         $config = [];
         /* Проверяем существование конфигурационного файла */
+
         if (file_exists($this->getConfigurationFile())) {
             /* Если конфигурационный файл существует , то подключаем его */
             require $this->getConfigurationFile();
+            //$config = yaml_parse(file_get_contents($this->getConfigurationFile()));
+            
             /* Тип соединения default ? да - нет */
             if ($this->getConnectionType() != $this->getBaseConnectionType()) {
                 /* Проверяем есть ли в конфигурационном массиве секция с нужным нам типом подключения */

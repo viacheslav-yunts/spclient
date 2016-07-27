@@ -8,10 +8,10 @@
  *
  */
 
-namespace connection\common\Sap\DefaultConfig;
+namespace Sap\Odatalib\config\Sap\DefaultConfig;
 
 
-use connection\common\Sap\SapConfig;
+use Sap\Odatalib\config\Sap\SapConfig;
 
 class SapDefaultConfig extends SapConfig
 {
