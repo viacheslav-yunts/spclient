@@ -8,50 +8,18 @@ use Sap\Odatalib\IRequest;
 */
 class Odatalib 
 {
-    private $_http_request = null;
-    private $_request = null;
-
-    public function getRequest()
-    {
-        return $this->_request;
-    }
-
-    public function setRequest(IRequest $request)
-    {
-        $this->_request = $request;
-    }
-
-    public function setResponce()
-    {
-        
-    }
-
-    public function getResponce()
-    {
-        
-    }
-
-    public function buildQuery()
-    {
-        $this->_createHttpRequest();
-        
-    }
-
     /**
-    * выполнить запрос
+    * создание объекта настройки для подключения odata
+    * 
+    * @param mixed $connection_system
+    * @param mixed $connection_type
+    * @param mixed $config_file_path
+    * @return object 
     */
-    public function execute()
+    public function createConnectionConfig($connection_system = '', $connection_type = '', $config_file_path='')
     {
-        $this->_createHttpRequest();
-        return true;
+        $config_factory = new ConfigFactory();
+        return $config_factory->create($connection_system, $connection_type, $config_file_path);
     }
-    
-    private function _createHttpRequest()
-    {
-        if (! is_null($this->getRequest())) {
-            $this->_http_request = new HttpRequest(
-                $this->getRequest(), $this->getConfig()
-            );
-        }
-    }
+
 }

@@ -14,7 +14,7 @@ class SingleRequest implements IRequest
     // запрос
     private $_body = false;
     
-    public function __construct($url, $config){
+    public function __construct($url, $config, $type='GET'){
         $this->_url = $url;
         $this->_config = $config;
     }
@@ -26,7 +26,7 @@ class SingleRequest implements IRequest
     */
     public function setUrl( $new_url )
     {
-        $this->_url = $new_url;    
+        $this->_url = $new_url;
     }
     
     /**
@@ -128,13 +128,13 @@ class SingleRequest implements IRequest
     }
  
     /**
-        * To add a query option.
-        *
-        * @param string $option The string value that contains the name of the
-        *                 query string option to add
-        * @param string $value The string that contains the value of the query
-        *                 string option
-        */
+    * To add a query option.
+    *
+    * @param string $option The string value that contains the name of the
+    *                 query string option to add
+    * @param string $value The string that contains the value of the query
+    *                 string option
+    */
     public function AddQueryOption($option, $value)
     {
         $option = trim($option);
@@ -194,51 +194,51 @@ class SingleRequest implements IRequest
     
         
     /**
-        * $top=n     
-        * 
-        * Ограничивает запрос первыми n сущностями
-        * 
-        * @param mixed $expression
-        */
+    * $top=n     
+    * 
+    * Ограничивает запрос первыми n сущностями
+    * 
+    * @param mixed $expression
+    */
     public function Top($expression)
     {
         return $this->AddQueryOption('$top', (int) $expression);    
     }
         
     /**
-        * $skip=n     
-        * Пропускает первые n сущностей в наборе
-        * 
-        * @param mixed $expression
-        */
+    * $skip=n     
+    * Пропускает первые n сущностей в наборе
+    * 
+    * @param mixed $expression
+    */
     public function Skip($expression = 0)
     {
         return $this->AddQueryOption('$skip', (int) $expression);
     }
         
     /**
-        * $inlinecount=allpages     
-        * Включает счетчик всех сущностей из набора в результат
-        */
+    * $inlinecount=allpages     
+    * Включает счетчик всех сущностей из набора в результат
+    */
     public function Inlinecount($expression='allpages')
     {
         return $this->AddQueryOption('$inlinecount', $expression);   
     } 
         
     /**
-        * $select=<выражение>     
-        * Указывает возвращаемое подмножество свойств сущности
-        */
+    * $select=<выражение>     
+    * Указывает возвращаемое подмножество свойств сущности
+    */
     public function Select($expression)
     {
         return $this->AddQueryOption('$select', $expression);    
     }
         
     /**
-        * $format     
-        * Указывает формат возвращаемого канала (ATOM или JSON). 
-        * Этот параметр не поддерживается в WCF Data Services
-        */
+    * $format     
+    * Указывает формат возвращаемого канала (ATOM или JSON). 
+    * Этот параметр не поддерживается в WCF Data Services
+    */
     public function Format($expression)
     {
         return $this->AddQueryOption('$format', $expression);    
@@ -269,19 +269,13 @@ class SingleRequest implements IRequest
             // init
             $httpRequest = $this->_initRequest();
             
-            // установить пользователя, под которым будет выполняться запрос
-            $httpRequest->setSapUser( $this->_user_name );
-            // установить пароль пользователя, под которым будет выполняться запрос
-            $httpRequest->setSapUserPassword( $this->_user_password );
-            // установить таймаут
-            $httpRequest->setTimeout( $this->_timeout );
             // результат работы запроса                                         
             $response = $httpRequest->GetResponse();
             //echo "<pre>"; print_r( $response ); echo "</pre>"; die('end');
             
             return new ODATA_RESPONSE( $response );
             
-        }catch( InvalidOperation  $e ){
+        }catch(InvalidOperation  $e ){
             
             $response = new ODATA_RESPONSE( false );
             $response->setError( true ); 
