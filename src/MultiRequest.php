@@ -4,7 +4,7 @@ namespace Sap\Odatalib;
 
 use Sap\Odatalib\IRequest;
 use Sap\Odatalib\SingleRequest;
-class MultiRequest implements IRequst
+class MultiRequest implements IRequest
 {
     private $_requests = array();
 
