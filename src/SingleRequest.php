@@ -14,7 +14,7 @@ class SingleRequest implements IRequest
     // запрос
     private $_body = false;
     
-    public function __construct($url, $config, $type='GET'){
+    public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET'){
         $this->_url = $url;
         $this->_config = $config;
     }
