@@ -3,6 +3,7 @@ namespace Sap\Odatalib;
 
 
 use Sap\Odatalib\ConfigFactory;
+use Sap\Odatalib\SingleRequest;
 /**
 * 
 */
