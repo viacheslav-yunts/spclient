@@ -11,12 +11,12 @@ class MultiRequest implements IRequest
     public function add(SingleRequest $single_request, $key = null) 
     {
         if ($key == null) {
-            $this->_requests[] = $obj;
+            $this->_requests[] = $single_request;
         } else {
             if (isset($this->_requests[$key])) {
                 throw new \Exception("Key $key already in use.");
             } else {
-                $this->_requests[$key] = $obj;
+                $this->_requests[$key] = $single_request;
             }
         }
     }
