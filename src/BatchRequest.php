@@ -3,7 +3,8 @@ namespace Sap\Odatalib;
 
 
 use Sap\Odatalib\IRequest;
-class BatchRequest implements IRequest
+use Sap\Odatalib\SingleRequest;
+class BatchRequest extends SingleRequest implements IRequest
 {
     public $arr_requests = array();
 
