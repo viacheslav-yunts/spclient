@@ -13,24 +13,25 @@ class SingleRequest implements IRequest
     // req_type
     private $_request_type = '';
     // заголовки запроса
-    private $_headers = false;
+    private $_headers = array();
     // запрос
     private $_body = false;
     
-    public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET'){
-        $this->_url = $url;
+    public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET')
+    {
+        $this->setUrl($url);
+        $this->setTrasferType($request_type);
         $this->_config = $config;
-        $this->_request_type = $request_type;
     }
 
     /**
     * function setUrl
-    *                                                         
+    *
     * @param string $new_url
     */
-    public function setUrl( $new_url )
+    public function setUrl($new_url)
     {
-        $this->_url = $new_url;
+        $this->_url = trim($new_url);
     }
     
     /**
@@ -43,94 +44,40 @@ class SingleRequest implements IRequest
     {
         return $this->_url;
     }
-    
-    /**
-    * установить таймаут
-    */
-    public function setTimeout( $new_timeout ){
-        $this->_timeout = $new_timeout;
-    }
-    
-    /**
-    * получить текущий установленный таймаут
-    */
-    public function getTimeout(){
-        return $this->_timeout;
-    }
-    /**
-    * установить пользователя сап
-    */
-    public function setOdataUserName($user_name){
-        $this->_user_name = $user_name;
-    }
 
     /**
-    * получить пользователя сап
-    */
-    public function getOdataUserName(){
-        return $this->_user_name;
-    }
-    /**
-    * установить пароль пользователя сап
-    */
-    public function setOdataUserPassword($user_passwd){
-        $this->_user_password = $user_passwd;
-    }
-
-    /**
-    * получить пароль пользователя сап
-    */
-    public function getOdataUserPassword(){
-        return $this->_user_password;
-    }
-        
-    /**
-    * function setTrasferType
-    * 
     * @param mixed $type
     */
-    public function setTrasferType( $type )
+    public function setTrasferType($type)
     {
-        $type = strtoupper( $type );
-        if( in_array( $type, $this->_arrTransferTypes ) )
-        {
-            $this->_req_type =  $type;
-            return true;
-        }
-        return false;
+        $this->_request_type = strtoupper(trim($type));
     }
     
     /**
-    * function getTransferType
-    * 
-    * @return string $_req_type
+    * @return string $_request_type
     */
     public function getTransferType()
     {
-        return $this->_req_type;
+        return $this->_request_type;
     }
-     
+
     /**
-    * function addHeaderOption
-    * 
     * @param mixed $header_name
     * @param mixed $header_value
     */
     public function AddHeaderOption($header_name, $header_value)
     {
-        $this->_headers[ $header_name ] =  $header_value;
+        $this->_headers[$header_name] = $header_value;
     }
     
     /**
-    * function  getHeaderOption
-    *     
     * @return mixed $_headers
     */
     public function getHeaderOption()
     {
         return $this->_headers;
     }
- 
+
     /**
     * To add a query option.
     *
@@ -142,23 +89,27 @@ class SingleRequest implements IRequest
     public function AddQueryOption($option, $value)
     {
         $option = trim($option);
-        if( is_string($value) )$value  = trim($value);
+        if (is_string($value)) $value = trim($value);
 
-        
-        if( array_key_exists( $option,  $this->systemQueryOptions ) )
-        {
-            if( is_array( $this->systemQueryOptions[$option] ) ) $this->systemQueryOptions[$option][] = $value;
-            else $this->systemQueryOptions[$option] = $value;   
-            
-        }else{
-            
-            $this->_other[ $option ] =  $value;    
+        if (array_key_exists($option, $this->systemQueryOptions)) {
+
+            if (is_array($this->systemQueryOptions[$option])) $this->systemQueryOptions[$option][] = $value;
+            else $this->systemQueryOptions[$option] = $value;
+
+        } else {
+
+            $this->_other[$option] = $value;
+
         }
-        
-        return $this;
     }
-   
-    
+
+    // добавляем переменную в запрос
+    public function addParam($param_name, $param_value, $wrap_in_quotes =false )
+    {
+        if ($wrap_in_quotes) $param_value = "'".$param_value."'"; 
+        $this->AddQueryOption($param_name, $param_value );
+    }
+
     /**
         * $orderby=<выражение>     
         * Упорядочивает результаты по набору свойств сущности
@@ -169,6 +120,116 @@ class SingleRequest implements IRequest
     {
         return $this->AddQueryOption('$orderby', $expression);
     }
+    /**
+    * $top=n     
+    * 
+    * Ограничивает запрос первыми n сущностями
+    * 
+    * @param mixed $expression
+    */
+    public function Top($expression)
+    {
+        return $this->AddQueryOption('$top', (int) $expression);
+    }
+        
+    /**
+    * $skip=n     
+    * Пропускает первые n сущностей в наборе
+    * 
+    * @param mixed $expression
+    */
+    public function Skip($expression = 0)
+    {
+        return $this->AddQueryOption('$skip', (int) $expression);
+    }
+
+    /**
+    * $inlinecount=allpages     
+    * Включает счетчик всех сущностей из набора в результат
+    */
+    public function Inlinecount($expression = 'allpages')
+    {
+        return $this->AddQueryOption('$inlinecount', $expression);
+    } 
+
+    /**
+    * $select=<выражение>     
+    * Указывает возвращаемое подмножество свойств сущности
+    */
+    public function Select($expression)
+    {
+        return $this->AddQueryOption('$select', $expression);
+    }
+
+    /**
+    * $format     
+    * Указывает формат возвращаемого канала (ATOM или JSON). 
+    * Этот параметр не поддерживается в WCF Data Services
+    */
+    public function Format($expression)
+    {
+        return $this->AddQueryOption('$format', $expression);
+    }
+
+    
+    
+// ---------- NOT USED ------------------------------------------
+
+    
+    /**
+    * установить таймаут
+    */
+    public function setTimeout($new_timeout)
+    {
+        $this->_timeout = $new_timeout;
+    }
+    
+    /**
+    * получить текущий установленный таймаут
+    */
+    public function getTimeout()
+    {
+        return $this->_timeout;
+    }
+    /**
+    * установить пользователя сап
+    */
+    public function setOdataUserName($user_name)
+    {
+        $this->_user_name = $user_name;
+    }
+
+    /**
+    * получить пользователя сап
+    */
+    public function getOdataUserName()
+    {
+        return $this->_user_name;
+    }
+    /**
+    * установить пароль пользователя сап
+    */
+    public function setOdataUserPassword($user_passwd)
+    {
+        $this->_user_password = $user_passwd;
+    }
+
+    /**
+    * получить пароль пользователя сап
+    */
+    public function getOdataUserPassword()
+    {
+        return $this->_user_password;
+    }
+        
+    
+     
+    
+ 
+    
+   
+    
+    
         
     /**
         * $filter=<выражение>     
@@ -197,56 +258,6 @@ class SingleRequest implements IRequest
     }
     
         
-    /**
-    * $top=n     
-    * 
-    * Ограничивает запрос первыми n сущностями
-    * 
-    * @param mixed $expression
-    */
-    public function Top($expression)
-    {
-        return $this->AddQueryOption('$top', (int) $expression);    
-    }
-        
-    /**
-    * $skip=n     
-    * Пропускает первые n сущностей в наборе
-    * 
-    * @param mixed $expression
-    */
-    public function Skip($expression = 0)
-    {
-        return $this->AddQueryOption('$skip', (int) $expression);
-    }
-        
-    /**
-    * $inlinecount=allpages     
-    * Включает счетчик всех сущностей из набора в результат
-    */
-    public function Inlinecount($expression='allpages')
-    {
-        return $this->AddQueryOption('$inlinecount', $expression);   
-    } 
-        
-    /**
-    * $select=<выражение>     
-    * Указывает возвращаемое подмножество свойств сущности
-    */
-    public function Select($expression)
-    {
-        return $this->AddQueryOption('$select', $expression);    
-    }
-        
-    /**
-    * $format     
-    * Указывает формат возвращаемого канала (ATOM или JSON). 
-    * Этот параметр не поддерживается в WCF Data Services
-    */
-    public function Format($expression)
-    {
-        return $this->AddQueryOption('$format', $expression);    
-    }
     
     
     /**
@@ -258,7 +269,7 @@ class SingleRequest implements IRequest
         
         $httpRequest = $this->_initRequest();
         
-        $query = $httpRequest->buildQuery();    
+        $query = $httpRequest->buildQuery();
         
         //echo "<pre>"; print_r( $query ); echo "</pre>"; die;
         

@@ -13,7 +13,7 @@ class OdatalibTest extends PHPUnit_Framework_TestCase
         $method_type = 'GET';
         $conn_system = 'sap';
         $conn_type   = 'default';
-        $conn_file_path = '/home/vyuntsevich/www/app/Resources/connectionsConfig';
+        $conn_file_path = '/connectionsConfig';
         
         $this->assertSame($method_name, $odataLib->createRequest($method_name, $method_type, $conn_system, $conn_type, $conn_file_path)->getUrl());
     }
