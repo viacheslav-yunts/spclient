@@ -12,8 +12,6 @@ class SingleRequest implements IRequest
     private $_config = null;
     // req_type
     private $_request_type = '';
-    // заголовки запроса
-    private $_headers = array();
     // параметры урла
     private $_systemQueryOptions = array(
                 '$expand'       => array(),
@@ -26,6 +24,8 @@ class SingleRequest implements IRequest
                 '$top'          => '',
                 '$skiptoken'    => ''
     );
+    // заголовки запроса
+    private $_headers = array();
     // запрос
     private $_body = array();
     
