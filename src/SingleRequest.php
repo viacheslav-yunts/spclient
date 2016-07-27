@@ -103,10 +103,10 @@ class SingleRequest implements IRequest
         $option = trim($option);
         if (is_string($value)) $value = trim($value);
 
-        if (array_key_exists($option, $this->systemQueryOptions)) {
+        if (array_key_exists($option, $this->_systemQueryOptions)) {
 
-            if (is_array($this->systemQueryOptions[$option])) $this->systemQueryOptions[$option][] = $value;
-            else $this->systemQueryOptions[$option] = $value;
+            if (is_array($this->_systemQueryOptions[$option])) $this->_systemQueryOptions[$option][] = $value;
+            else $this->_systemQueryOptions[$option] = $value;
 
         } else {
 
@@ -253,7 +253,7 @@ class SingleRequest implements IRequest
         */
     public function Filter($expression, $operation_type = 'and')
     {
-        $this->systemQueryOptions['$filter'] .= empty( $this->systemQueryOptions['$filter'] )?$expression:' '.$operation_type.' '.$expression;
+        $this->_systemQueryOptions['$filter'] .= empty( $this->_systemQueryOptions['$filter'] )?$expression:' '.$operation_type.' '.$expression;
     } 
     public function addFiltr( $param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and' ){
         if( is_array( $param_value ) ){
@@ -328,7 +328,7 @@ class SingleRequest implements IRequest
                                              false,
                                              $this->_headers,
                                              array( 
-                                               'system_options' => $this->systemQueryOptions, 
+                                               'system_options' => $this->_systemQueryOptions, 
                                                'custom_params'  => $this->_other, 
                                              ),
                                              false 
