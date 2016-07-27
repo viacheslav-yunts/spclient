@@ -2,7 +2,7 @@
 namespace Sap\Odatalib;
 
 
-use Sap\Odatalib\IRequest;
+use Sap\Odatalib\ConfigFactory;
 /**
 * 
 */
