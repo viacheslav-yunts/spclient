@@ -2,16 +2,17 @@
 namespace Sap\Odatalib\common;
 
 
-use Sap\Odatalib\common\UrlEncodeTrait;
+//use Sap\Odatalib\common\UrlEncodeTrait;
 use Sap\Odatalib\config\BaseSapConfig;
 class HttpRequest
 {
+    //use Sap\Odatalib\common\UrlEncodeTrait;
+
     private $_config;
     private $_url = '';
     private $_proxy = false;
     private $_headers = false;
     private $_body = false;
-    use Sap\Odatalib\common\UrlEncodeTrait;
 
     public function __construct(BaseSapConfig $connection_config)
     {
