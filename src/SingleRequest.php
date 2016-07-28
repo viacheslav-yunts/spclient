@@ -31,9 +31,15 @@ class SingleRequest implements IRequest
     
     public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET')
     {
+        $this->_config = $config;
         $this->setUrl($url);
         $this->setTrasferType($request_type);
-        $this->_config = $config;
+    }
+
+    public function constructUrl()
+    {
+        //'url' => 'http://10.10.50.132:8000/sap/opu/odata/sap/ZSD_SHOP_NWG_BASKET_SCHEDULE_SRV/USERACTIONSET',
+        return 'http://' . $this->_config->hetHost() . '/sap/opu/odata/sap/' . $this->getUrl();
     }
 
     /**

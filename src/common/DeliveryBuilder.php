@@ -10,7 +10,7 @@ class DeliveryBuilder
 
     public function __construct(IRequest $request)
     {
-        $this -> _http = (object) array();
+        $this -> _http = new \stdClass();
         $this -> _request = $request;
     }
 
@@ -21,7 +21,7 @@ class DeliveryBuilder
     
     public function constructUrl()
     {
-        $this -> _http -> url = $this -> _request -> getUrl();
+        $this -> _http -> url = $this -> _request -> constructUrl();
     }
 
     public function constructHeader()
