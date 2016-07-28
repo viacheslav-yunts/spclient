@@ -61,7 +61,7 @@ class Odatalib
     }
 
     /**
-    * софрмировать запрос без вызова
+    * сформировать запрос без вызова
     * 
     * @param IRequest $request
     */
@@ -70,7 +70,8 @@ class Odatalib
         $builder = new DeliveryBuilder($request);
         $delivery_director = new DeliveryDirector($builder);
         $delivery_director -> constructRequest();
-        return $builder->generateCall();
+        $transfer = $builder->getHttp();
+        return $transfer->test();
     }
     
     /**
@@ -83,6 +84,7 @@ class Odatalib
         $builder = new DeliveryBuilder($request);
         $delivery_director = new DeliveryDirector($builder);
         $delivery_director -> constructRequest();
-        return $builder->generateCall();
+        $transfer = $builder->getHttp();
+        return $transfer->execute();
     }
 }

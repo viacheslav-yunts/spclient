@@ -36,6 +36,11 @@ class SingleRequest implements IRequest
         $this->setTrasferType($request_type);
     }
 
+    public function getConfig()
+    {
+        return $this->_config; 
+    }
+
     public function constructUrl()
     {
         $url ='http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl() . '?';
