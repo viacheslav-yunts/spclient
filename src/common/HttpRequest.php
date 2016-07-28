@@ -2,6 +2,7 @@
 namespace Sap\Odatalib\common;
 
 
+use Sap\Odatalib\common\UrlEncodeTrait;
 use Sap\Odatalib\config\BaseSapConfig;
 class HttpRequest
 {
