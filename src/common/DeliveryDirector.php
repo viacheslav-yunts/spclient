@@ -7,9 +7,9 @@ class DeliveryDirector
 {
     protected $_builder = null;
 
-    public function __construct(DeliveryBuilder $request)
+    public function __construct(DeliveryBuilder $builder)
     {
-        $this -> _builder = $request;
+        $this -> _builder = $builder;
     }
 
     public function constructRequest()

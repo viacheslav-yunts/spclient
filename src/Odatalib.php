@@ -7,8 +7,8 @@ use Sap\Odatalib\ConfigFactory;
 use Sap\Odatalib\SingleRequest;
 use Sap\Odatalib\MultiRequest;
 use Sap\Odatalib\BatchRequest;
-use Sap\Odatalib\Common\DeliveryBuilder;
-use Sap\Odatalib\Common\DeliveryDirector;
+use Sap\Odatalib\common\DeliveryBuilder;
+use Sap\Odatalib\common\DeliveryDirector;
 /**
 * 
 */
