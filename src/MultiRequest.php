@@ -43,6 +43,25 @@ class MultiRequest implements IRequest
         return isset($this->_requests[$key]);
     }
 
+    /**
+    * function buildQuery()
+    * 
+    * @return string $query
+    */
+    public function buildQuery()
+    {
+
+        return $this;
+        
+        $httpRequest = $this->_initRequest();
+        
+        $query = $httpRequest->buildQuery();
+        
+        //echo "<pre>"; print_r( $query ); echo "</pre>"; die;
+        
+        return $query;
+    }
+    
     public function execute()
     {
         

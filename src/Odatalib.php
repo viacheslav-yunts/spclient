@@ -58,8 +58,29 @@ class Odatalib
         return $config_factory->create($connection_system, $connection_type, $config_file_path);
     }
 
+    /**
+    * софрмировать запрос без вызова
+    * 
+    * @param IRequest $request
+    */
     public function buildQuery(IRequest $request)
     {
-        echo "<pre>"; print_r($request); die;
+        $builder = new DeliveryBuilder($request);
+        $delivery_director = new DeliveryDirector($builder);
+        $delivery_director -> constructRequest();
+        return $builder->generateCall();
+    }
+    
+    /**
+    * софрмировать запрос с вызовом
+    * 
+    * @param IRequest $request
+    */
+    public function execute(IRequest $request)
+    {
+        //$transfer_director = new TransferDirector($request);
+        //$transfer_director -> constructRequest();
+        //return $request->generateCall();
+        //'url' => 'http://10.10.50.132:8000/sap/opu/odata/sap/ZSD_SHOP_NWG_BASKET_SCHEDULE_SRV/USERACTIONSET',
     }
 }

@@ -182,103 +182,38 @@ class SingleRequest implements IRequest
     {
         return $this->AddQueryOption('$format', $expression);
     }
-
-    
-    
-// ---------- NOT USED ------------------------------------------
-
-    
     /**
-    * установить таймаут
+    * $filter=<выражение>     
+    * Выражение позволяет ограничивать результаты, возвращаемые запросом 
+    * (пример: $filter=Status eq ‘Available’ ограничивает результаты сущностями, 
+    * у которых свойство Status имеет значение «Available»).
+    * 
+    * устанавливает опцию полностью, стирает уже заполлненный до этого фильтр
     */
-    public function setTimeout($new_timeout)
-    {
-        $this->_timeout = $new_timeout;
-    }
-    
-    /**
-    * получить текущий установленный таймаут
-    */
-    public function getTimeout()
-    {
-        return $this->_timeout;
-    }
-    /**
-    * установить пользователя сап
-    */
-    public function setOdataUserName($user_name)
-    {
-        $this->_user_name = $user_name;
-    }
-
-    /**
-    * получить пользователя сап
-    */
-    public function getOdataUserName()
-    {
-        return $this->_user_name;
-    }
-    /**
-    * установить пароль пользователя сап
-    */
-    public function setOdataUserPassword($user_passwd)
-    {
-        $this->_user_password = $user_passwd;
-    }
-
-    /**
-    * получить пароль пользователя сап
-    */
-    public function getOdataUserPassword()
-    {
-        return $this->_user_password;
-    }
-        
-    
-     
-    
- 
-    
-   
-    
-    
-        
-    /**
-        * $filter=<выражение>     
-        * Выражение позволяет ограничивать результаты, возвращаемые запросом 
-        * (пример: $filter=Status eq ‘Available’ ограничивает результаты сущностями, 
-        * у которых свойство Status имеет значение «Available»).
-        * 
-        * устанавливает опцию полностью, стирает уже заполлненный до этого фильтр
-        */
     public function Filter($expression, $operation_type = 'and')
     {
         $this->_systemQueryOptions['$filter'] .= empty( $this->_systemQueryOptions['$filter'] )?$expression:' '.$operation_type.' '.$expression;
     } 
-    public function addFiltr( $param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and' ){
-        if( is_array( $param_value ) ){
+    public function addFiltr($param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and') {
+        if (is_array($param_value)) {
             $qw = ($is_q)?"'":"'";
             $p_value = ( count( $param_value ) == 1 )?'':'(';
             $p_value .= $param_name.' '.$param_type.' '.$qw.implode("$qw $arr_type $param_name $param_type $qw", $param_value).$qw;
             $p_value .= ( count( $param_value ) == 1 )?'':')';
             $this->Filter( $p_value ); 
-        }else{
-            if( $is_q ) $p_value = "'".trim($param_value)."'";
-            //@anton : добавил arr_type в вызов Filter, чтобы коректно обрабатывалась фильтрация через or
-            $this->Filter( $param_name.' '.$param_type.' '.$p_value, $arr_type ); 
+        } else {
+            if ($is_q) $p_value = "'" . trim($param_value) . "'";
+            $this->Filter($param_name . ' ' . $param_type . ' ' . $p_value, $arr_type);
         }
     }
-    
-        
-    
-    
+
     /**
     * function buildQuery()
     * 
     * @return string $query
     */
-    public function buildQuery(){
-        
+    public function buildQuery()
+    {
         $httpRequest = $this->_initRequest();
         
         $query = $httpRequest->buildQuery();
@@ -287,7 +222,7 @@ class SingleRequest implements IRequest
         
         return $query;
     }
-    
+
     // выполнить запрос
     public function execute()
     {
@@ -300,11 +235,11 @@ class SingleRequest implements IRequest
             $response = $httpRequest->GetResponse();
             //echo "<pre>"; print_r( $response ); echo "</pre>"; die('end');
             
-            return new ODATA_RESPONSE( $response );
+            return new ODATA_RESPONSE($response);
             
         }catch(InvalidOperation  $e ){
             
-            $response = new ODATA_RESPONSE( false );
+            $response = new ODATA_RESPONSE(false);
             $response->setError( true ); 
             
             $messages = (object) array(
@@ -313,13 +248,12 @@ class SingleRequest implements IRequest
                 'severity'  => 'warning',   
             );
             $response->setMessages( $messages );
-                
-               
+
         }
         
         return $response;
     }
-    
+
     private function _initRequest()
     {
         // запрос в сап
@@ -335,6 +269,5 @@ class SingleRequest implements IRequest
                                           );
         return  $httpRequest;   
     }
-    
-    
+
 }
