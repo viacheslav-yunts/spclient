@@ -51,6 +51,6 @@ class HttpRequest
 
     public function execute()
     {
-        return true;
+        return $this->test();
     }
 }
