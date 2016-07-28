@@ -38,8 +38,7 @@ class SingleRequest implements IRequest
 
     public function constructUrl()
     {
-        //'url' => 'http://10.10.50.132:8000/sap/opu/odata/sap/ZSD_SHOP_NWG_BASKET_SCHEDULE_SRV/USERACTIONSET',
-        return 'http://' . $this->_config->hetHost() . '/sap/opu/odata/sap/' . $this->getUrl();
+        return 'http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl();
     }
 
     /**
