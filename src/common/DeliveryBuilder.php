@@ -10,7 +10,7 @@ class DeliveryBuilder
 
     public function __construct(IRequest $request)
     {
-        $this -> _http = new stdClass();
+        $this -> _http = (object) array();
         $this -> _request = $request;
     }
 
