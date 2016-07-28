@@ -1,5 +1,5 @@
 <?php
-namespace Sap\Odatalib\Common;
+namespace Sap\Odatalib\common;
 
 
 use Sap\Odatalib\IRequest;

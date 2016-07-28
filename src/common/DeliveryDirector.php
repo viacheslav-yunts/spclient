@@ -1,8 +1,8 @@
 <?php
-namespace Sap\Odatalib\Common;
+namespace Sap\Odatalib\common;
 
 
-use Sap\Odatalib\Common\DeliveryBuilder;
+use Sap\Odatalib\common\DeliveryBuilder;
 class DeliveryDirector
 {
     protected $_builder = null;
