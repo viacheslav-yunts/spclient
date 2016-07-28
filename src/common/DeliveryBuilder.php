@@ -31,7 +31,7 @@ class DeliveryBuilder
 
     public function constructBody()
     {
-        $this -> _http -> body = $this -> _request -> getHeaderOption();
+        $this -> _http -> body = $this -> _request -> constructBody();
     }
 
     public function generateCall()

@@ -52,6 +52,11 @@ class SingleRequest implements IRequest
         
         return $url;
     }
+    
+    public function constructBody()
+    {
+        return $this->_body;
+    }
 
     /**
     * function setUrl
