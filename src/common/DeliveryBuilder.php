@@ -10,8 +10,8 @@ class DeliveryBuilder
 
     public function __construct(IRequest $request)
     {
-        $this -> _http = new \stdClass();
         $this -> _request = $request;
+        $this -> _http = new \stdClass();
     }
 
     public function checkProxy()
