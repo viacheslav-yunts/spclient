@@ -87,16 +87,11 @@ class HttpRequest
                 break;
         }
 
-        $httpResponse = curl_exec($curlHandle);
-        echo "<pre>"; print_r($httpResponse); die('qwert');
-        if ($httpResponse) {
-
-            ;
-
-        } else {
-            //throw new InvalidOperation( curl_error($curlHandle) );
-        }
+        if (! $httpResponse = curl_exec($curlHandle)) {
+            trigger_error(curl_error($curlHandle));
+        } 
         curl_close($curlHandle);
+        echo "<pre>"; print_r($httpResponse); die('qwert');
         return $httpResponse;
     }
 }
