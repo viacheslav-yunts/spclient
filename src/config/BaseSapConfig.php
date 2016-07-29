@@ -60,6 +60,16 @@ abstract class BaseSapConfig implements BaseConfig
     /**
      * @var string
      */
+    protected $cookies_path;
+
+    /**
+     * @var string
+     */
+    protected $logs_path;
+
+    /**
+     * @var string
+     */
     protected $agent;
 
     /**
@@ -236,6 +246,42 @@ abstract class BaseSapConfig implements BaseConfig
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCookies_path()
+    {
+        return $this->cookies_path;
+    }
+
+    /**
+     * @param $path
+     * @return $this
+     */
+    public function setCookies_path($path)
+    {
+        $this->cookies_path = $path;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLogs_path()
+    {
+        return $this->logs_path;
+    }
+
+    /**
+     * @param $path
+     * @return $this
+     */
+    public function setLogs_path($path)
+    {
+        $this->logs_path = $path;
         return $this;
     }
 
