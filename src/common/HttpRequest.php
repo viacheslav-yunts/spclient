@@ -66,7 +66,7 @@ class HttpRequest
             }
             curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
         }
-        //curl_setopt($curlHandle, CURLOPT_USERAGENT, ODATA_USER_AGENT );
+        curl_setopt($curlHandle, CURLOPT_USERAGENT, 'ARMTEK USER AGENT');
         curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, $this->_config->getTimeout());
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
@@ -88,7 +88,7 @@ class HttpRequest
         }
 
         $httpResponse = curl_exec($curlHandle);
-
+        echo "<pre>"; print_r($httpResponse); die('qwert');
         if ($httpResponse) {
 
             ;
