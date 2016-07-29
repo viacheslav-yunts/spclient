@@ -99,9 +99,9 @@ class HttpRequest
             $info = curl_getinfo($curlHandle);
             echo "<pre>"; print_r($info); 
             
-            $header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
-            $body = substr($httpResponse, $header_size);
-            echo "<pre>"; print_r($body);
+            //$header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
+            //$body = substr($httpResponse, $header_size);
+            //echo "<pre>"; print_r($body);
         
         } 
 

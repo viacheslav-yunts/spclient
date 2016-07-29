@@ -46,6 +46,33 @@ class BatchRequest extends SingleRequest implements IRequest
     
     public function constructBody()
     {
+        $request_body = array();
+
+        foreach ($this->_requests as $request) {
+
+            $request_body[] = "--batch\n";
+            if ($request->getRequestType() == 'POST') {
+                $request_body[] = "Content-Type: multipart/mixed; boundary=changeset\n";
+                $request_body[] = "\n--changeset\n";
+                
+            }
+            $request_body[] = "Content-Type: application/http\n";
+            $request_body[] = "Content-Transfer-Encoding: binary\n";
+
+            $request_body[] = "\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\n";
+    
+            if ($request->getRequestType() == 'POST') {
+                $request_body[] = "Content-Type: application/json; charset=utf-8 \n";
+                $request_body[] = "Accept: application/json \n";
+                $request_body[] = "\n" . json_encode($request->getParams()) . "\n";
+                $request_body[] = "--changeset--\n";
+                
+            }
+            $request_body[] = "\n\n";
+        }
+
+        $request_body[] = "--batch--\n";  
+        /*
         $request_body = '';
 
         foreach ($this->_requests as $request) {
@@ -72,6 +99,7 @@ class BatchRequest extends SingleRequest implements IRequest
         }
 
         $request_body .= "--batch--\n";  
+        */
         return $request_body;
     }
     
