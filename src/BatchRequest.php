@@ -44,7 +44,10 @@ class BatchRequest extends SingleRequest implements IRequest
         return isset($this->_requests[$key]);
     }
     
-    
+    public function constructBody()
+    {
+        return $this->_requests;
+    }
     
     
     
