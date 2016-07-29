@@ -45,16 +45,18 @@ class SingleRequest implements IRequest
     {
         $url ='http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl() . '?';
 
-        foreach ($this->_systemQueryOptions as $key => $val) {
-            if (! empty($val)) {
-                if (is_array($val)) {
-                    $url .='&'.$key.'='.strtr ( implode(',',$val), array ("&amp;"=> "%26", "&"=> "%26"));
-                } else {
-                    $url .='&'.$key.'='.strtr ( $val, array ("&amp;"=> "%26", "&"=> "%26"));
+        if ($this->_request_type == 'GET') {
+            foreach ($this->_systemQueryOptions as $key => $val) {
+                if (! empty($val)) {
+                    if (is_array($val)) {
+                        $url .='&'.$key.'='.strtr ( implode(',',$val), array ("&amp;"=> "%26", "&"=> "%26"));
+                    } else {
+                        $url .='&'.$key.'='.strtr ( $val, array ("&amp;"=> "%26", "&"=> "%26"));
+                    }
                 }
             }
         }
-        
+
         return $url;
     }
     
