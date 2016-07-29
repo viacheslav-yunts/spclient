@@ -78,7 +78,8 @@ class HttpRequest
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curlHandle, CURLOPT_ENCODING , "gzip");
-            
+         
+        echo $this->_request_type;
         switch ($this->_request_type) {
             case "GET" :
                 curl_setopt($curlHandle, CURLOPT_HTTPGET, true);
