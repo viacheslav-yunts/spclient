@@ -15,6 +15,7 @@ class DeliveryDirector
     public function constructRequest()
     {
         $this -> _builder -> constructUrl();
+        $this -> _builder -> constructRequestType();
         $this -> _builder -> checkProxy();
         $this -> _builder -> constructHeader();
         $this -> _builder -> constructBody();

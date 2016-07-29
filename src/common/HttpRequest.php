@@ -10,6 +10,7 @@ class HttpRequest
 
     private $_config;
     private $_url = '';
+    private $_request_type = '';
     private $_proxy = false;
     private $_headers = false;
     private $_body = false;
@@ -22,6 +23,11 @@ class HttpRequest
     public function setUrl($url)
     {
         $this->_url = $url;
+    }
+
+    public function setRequestType($request_type)
+    {
+        $this->_request_type = $request_type;
     }
 
     public function setProxy($status)
@@ -73,7 +79,7 @@ class HttpRequest
         curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curlHandle, CURLOPT_ENCODING , "gzip");
             
-        switch ($this->_proxy) {
+        switch ($this->_request_type) {
             case "GET" :
                 curl_setopt($curlHandle, CURLOPT_HTTPGET, true);
                 break;

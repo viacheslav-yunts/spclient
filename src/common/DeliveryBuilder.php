@@ -24,6 +24,11 @@ class DeliveryBuilder
     {
         $this -> _http -> setUrl($this -> _request -> constructUrl());
     }
+    
+    public function constructRequestType()
+    {
+        $this -> _http -> setRequestType($this -> _request -> getTransferType());
+    }
 
     public function constructHeader()
     {
