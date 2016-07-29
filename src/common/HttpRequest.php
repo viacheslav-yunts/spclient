@@ -6,7 +6,7 @@ namespace Sap\Odatalib\common;
 use Sap\Odatalib\config\BaseSapConfig;
 class HttpRequest
 {
-    //use Sap\Odatalib\common\UrlEncodeTrait;
+    use Sap\Odatalib\common\UrlEncodeTrait;
 
     private $_config;
     private $_url = '';
@@ -53,7 +53,7 @@ class HttpRequest
     {
         $curlHandle = curl_init();
         
-        curl_setopt($curlHandle, CURLOPT_URL, $this->_url); 
+        curl_setopt($curlHandle, CURLOPT_URL, $this->url_encode($this->_url)); 
         curl_setopt($curlHandle, CURLOPT_USERPWD, $this->_config->getLogin() . ":" . $this->_config->getPassword());
         curl_setopt($curlHandle, CURL_HTTP_VERSION_1_1, true);
         //curl_setopt($curlHandle, CURLOPT_COOKIEJAR,  $this->_config->getCookiesFilePath());
