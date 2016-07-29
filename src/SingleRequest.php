@@ -43,10 +43,9 @@ class SingleRequest implements IRequest
 
     public function constructUrl()
     {
-        $url ='http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl() ;
+        $url ='http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl() . '?';
 
         if ($this->_request_type == 'GET') {
-            $url .= '?';
             foreach ($this->_systemQueryOptions as $key => $val) {
                 if (! empty($val)) {
                     if (is_array($val)) {
