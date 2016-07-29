@@ -31,4 +31,9 @@ class BatchSubRequest
         $this->params[$param_name] = $param_value;
         //$this->AddQueryOption($param_name, $param_value );
     }
+    
+    public function getParams()
+    {
+        return $this->params;
+    }
 }

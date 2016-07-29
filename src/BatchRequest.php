@@ -51,12 +51,21 @@ class BatchRequest extends SingleRequest implements IRequest
         foreach ($this->_requests as $request) {
 
             $request_body .= "\n--batch\n";
-
+            if ($request->getRequestType() == 'POST') {
+                $request_body .= "\nContent-Type: multipart/mixed; boundary=changeset\n";
+                $request_body .= "\n--changeset\n";
+                
+            }
             $request_body .= "\nContent-Type: application/http\n";
             $request_body .= "\nContent-Transfer-Encoding: binary\n";
 
             $request_body .= "\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\n";
     
+            if ($request->getRequestType() == 'POST') {
+                $request_body .= "\n" . json_encode($request->getParams()) . "\n";
+                $request_body .= "\n--changeset--\n";
+                
+            }
         }
 
         $request_body .= "\n--batch--\n";
