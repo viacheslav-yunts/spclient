@@ -87,7 +87,7 @@ class HttpRequest
                 curl_setopt($curlHandle, CURLOPT_POST, true);
                 curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
                 curl_setopt($curlHandle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, $this->_body);
+                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($this->_body));
                 break;
             default:
                 break;
