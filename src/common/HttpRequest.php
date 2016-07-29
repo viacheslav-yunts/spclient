@@ -6,7 +6,7 @@ namespace Sap\Odatalib\common;
 use Sap\Odatalib\config\BaseSapConfig;
 class HttpRequest
 {
-    use Sap\Odatalib\common\UrlEncodeTrait;
+    use UrlEncodeTrait;
 
     private $_config;
     private $_url = '';
