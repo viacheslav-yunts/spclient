@@ -14,4 +14,12 @@ class BatchSubRequest
         $this->_url = $method_name;
         $this->_req_type = $method_request_type;
     }
+
+    // добавляем переменную в запрос
+    public function addParam($param_name, $param_value, $wrap_in_quotes =false )
+    {
+        if ($wrap_in_quotes) $param_value = "'".$param_value."'";
+        $this->params[$param_name] = $param_value;
+        //$this->AddQueryOption($param_name, $param_value );
+    }
 }
