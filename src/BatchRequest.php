@@ -70,7 +70,7 @@ class BatchRequest extends SingleRequest implements IRequest
             }
         }
 
-        $request_body .= "\n--batch--\n";
+        $request_body .= "\n\n--batch--\n";
         return $request_body;
     }
     
