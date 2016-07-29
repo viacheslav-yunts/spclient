@@ -15,6 +15,15 @@ class BatchSubRequest
         $this->_req_type = $method_request_type;
     }
 
+    public function getUrl()
+    {
+        return $this->_url;
+    }
+    
+    public function getRequestType()
+    {
+        return $this->_req_type;
+    }
     // добавляем переменную в запрос
     public function addParam($param_name, $param_value, $wrap_in_quotes =false )
     {

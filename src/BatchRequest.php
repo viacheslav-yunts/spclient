@@ -46,7 +46,21 @@ class BatchRequest extends SingleRequest implements IRequest
     
     public function constructBody()
     {
-        return $this->_requests;
+        $request_body = '';
+
+        foreach ($this->_requests as $request) {
+
+            $request_body .= "\n--batch\n";
+
+            $request_body .= "\nContent-Type: application/http\n";
+            $request_body .= "\nContent-Transfer-Encoding: binary\n";
+
+            $request_body .= "\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\n";
+    
+        }
+
+        $request_body .= "\n--batch--\n";
+        return $request_body;
     }
     
     

@@ -78,8 +78,7 @@ class HttpRequest
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($curlHandle, CURLOPT_ENCODING , "gzip");
-         
-        echo $this->_request_type;
+
         switch ($this->_request_type) {
             case "GET" :
                 curl_setopt($curlHandle, CURLOPT_HTTPGET, true);
@@ -97,8 +96,9 @@ class HttpRequest
         if (! $httpResponse = curl_exec($curlHandle)) {
             trigger_error(curl_error($curlHandle));
         } 
+
         curl_close($curlHandle);
-        echo "<pre>"; print_r($httpResponse); die('qwert');
+
         return $httpResponse;
     }
 }
