@@ -96,8 +96,8 @@ class HttpRequest
         if (! $httpResponse = curl_exec($curlHandle)) {
             trigger_error(curl_error($curlHandle));
         } else {
-            $info = curl_getinfo($curlHandle);
-            echo "<pre>"; print_r($info); 
+            //$info = curl_getinfo($curlHandle);
+            //echo "<pre>"; print_r($info); 
             
             //$header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
             //$body = substr($httpResponse, $header_size);
