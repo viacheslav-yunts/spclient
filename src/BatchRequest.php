@@ -58,7 +58,6 @@ class BatchRequest extends SingleRequest implements IRequest
             }
             $request_body .= "Content-Type: application/http\n";
             $request_body .= "Content-Transfer-Encoding: binary\n";
-            $request_body .= "X-Requested-With: X\n";
 
             $request_body .= "\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\n";
     
