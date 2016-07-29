@@ -50,7 +50,7 @@ class BatchRequest extends SingleRequest implements IRequest
 
         foreach ($this->_requests as $request) {
 
-            $request_body .= "\n--batch\n";
+            $request_body .= "--batch\n";
             if ($request->getRequestType() == 'POST') {
                 $request_body .= "Content-Type: multipart/mixed; boundary=changeset\n";
                 $request_body .= "\n--changeset\n";
@@ -68,9 +68,10 @@ class BatchRequest extends SingleRequest implements IRequest
                 $request_body .= "--changeset--\n";
                 
             }
+            $request_body .= "\n";
         }
 
-        $request_body .= "\n\n--batch--\n";
+        $request_body .= "\n\n--batch--\n";  
         return $request_body;
     }
     
