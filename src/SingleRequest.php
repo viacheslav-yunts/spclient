@@ -241,13 +241,7 @@ class SingleRequest implements IRequest
     */
     public function buildQuery()
     {
-        $httpRequest = $this->_initRequest();
-        
-        $query = $httpRequest->buildQuery();
-        
-        //echo "<pre>"; print_r( $query ); echo "</pre>"; die;
-        
-        return $query;
+        return true;
     }
 
     // выполнить запрос
