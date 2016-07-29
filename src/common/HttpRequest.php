@@ -51,6 +51,52 @@ class HttpRequest
 
     public function execute()
     {
-        return $this->test();
+        $curlHandle = curl_init();
+        
+        curl_setopt($curlHandle, CURLOPT_URL, $this->_url); 
+        curl_setopt($curlHandle, CURLOPT_USERPWD, $this->_config->getLogin() . ":" . $this->_config->getPassword());
+        curl_setopt($curlHandle, CURL_HTTP_VERSION_1_1, true);
+        //curl_setopt($curlHandle, CURLOPT_COOKIEJAR,  $this->_config->getCookiesFilePath());
+        //curl_setopt($curlHandle, CURLOPT_COOKIEFILE, $this->_config->getCookiesFilePath());
+        curl_setopt($curlHandle, CURLOPT_HEADER, true);
+        if (! empty($this->_headers)) {
+            $headers = array();
+            foreach ($this->_headers as $key => $value) {
+                $headers[] = $key.': '.$value;
+            }
+            curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
+        }
+        //curl_setopt($curlHandle, CURLOPT_USERAGENT, ODATA_USER_AGENT );
+        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, $this->_config->getTimeout());
+        curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curlHandle, CURLOPT_ENCODING , "gzip");
+            
+        switch ($this->_proxy) {
+            case "GET" :
+                curl_setopt($curlHandle, CURLOPT_HTTPGET, true);
+                break;
+            case "POST" :
+                curl_setopt($curlHandle, CURLOPT_POST, true);
+                curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
+                curl_setopt($curlHandle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+                curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode($this->_body));
+                break;
+            default:
+                break;
+        }
+
+        $httpResponse = curl_exec($curlHandle);
+
+        if ($httpResponse) {
+
+            ;
+
+        } else {
+            //throw new InvalidOperation( curl_error($curlHandle) );
+        }
+        curl_close($curlHandle);
+        return $httpResponse;
     }
 }

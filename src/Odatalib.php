@@ -7,6 +7,7 @@ use Sap\Odatalib\ConfigFactory;
 use Sap\Odatalib\SingleRequest;
 use Sap\Odatalib\MultiRequest;
 use Sap\Odatalib\BatchRequest;
+use Sap\Odatalib\BatchSubRequest;
 use Sap\Odatalib\common\DeliveryBuilder;
 use Sap\Odatalib\common\DeliveryDirector;
 /**
@@ -45,6 +46,11 @@ class Odatalib
         //echo "<pre>"; print_r($odata_connection_config); die;
         
         return new BatchRequest($method_name, $odata_connection_config, $method_request_type);
+    }
+    
+    public function crateBatchSubRequest($method_name, $method_request_type = 'GET')
+    {
+        return new BatchSubRequest($method_name, $method_request_type);
     }
 
     /**
