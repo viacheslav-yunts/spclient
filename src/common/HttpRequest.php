@@ -95,6 +95,9 @@ class HttpRequest
 
         if (! $httpResponse = curl_exec($curlHandle)) {
             trigger_error(curl_error($curlHandle));
+        } else {
+            $info = curl_getinfo($curlHandle);
+            echo "<pre>"; print_r($info); die;
         } 
 
         curl_close($curlHandle);
