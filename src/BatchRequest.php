@@ -46,59 +46,34 @@ class BatchRequest extends SingleRequest implements IRequest
     
     public function constructBody()
     {
-        $request_body = '';
+        $request_body = '';   
+
         foreach ($this->_requests as $request) {
 
-            $request_body .= "--batch";
+            $request_body .= "--batch\r\n";
             if ($request->getRequestType() == 'POST') {
-                $request_body .= "Content-Type: multipart/mixed; boundary=changeset";
-                $request_body .= "--changeset";
+                $request_body .= "Content-Type: multipart/mixed; boundary=changeset\r\n";
+                $request_body .= "\r\n--changeset\r\n";
                 
             }
-            $request_body .= "Content-Type: application/http";
-            $request_body .= "Content-Transfer-Encoding: binary";
+            $request_body .= "Content-Type: application/http\r\n";
+            $request_body .= "Content-Transfer-Encoding: binary\r\n";
 
-            $request_body .= "" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1";
+            $request_body .= "\r\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\r\n";
     
             if ($request->getRequestType() == 'POST') {
 
-                $request_body .= "Content-Type: application/json; charset=utf-8 ";
-                $request_body .= "Accept: application/json ";
-                $request_body .= "" . json_encode($request->getParams()) . "";
-                $request_body .= "--changeset--";
-
-            }
-            $request_body .= "";
-        }
-
-        $request_body .= "--batch--";
-        /*
-        foreach ($this->_requests as $request) {
-
-            $request_body .= "--batch\n";
-            if ($request->getRequestType() == 'POST') {
-                $request_body .= "Content-Type: multipart/mixed; boundary=changeset\n";
-                $request_body .= "\n--changeset\n";
-                
-            }
-            $request_body .= "Content-Type: application/http\n";
-            $request_body .= "Content-Transfer-Encoding: binary\n";
-
-            $request_body .= "\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\n";
-    
-            if ($request->getRequestType() == 'POST') {
-
-                $request_body .= "Content-Type: application/json; charset=utf-8 \n";
+                $request_body .= "Content-Type: application/json; charset=utf-8 \r\n";
                 $request_body .= "Accept: application/json \n";
-                $request_body .= "\n" . json_encode($request->getParams()) . "\n";
-                $request_body .= "--changeset--\n";
+                $request_body .= "\r\n" . json_encode($request->getParams()) . "\r\n";
+                $request_body .= "--changeset--\r\n";
 
             }
-            $request_body .= "\n\n";
+            $request_body .= "\r\n\r\n";
         }
 
-        $request_body .= "--batch--\n";
-        */
+        $request_body .= "--batch--\r\n";
+
         return $request_body;
     }
     
