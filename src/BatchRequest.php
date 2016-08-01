@@ -62,10 +62,11 @@ class BatchRequest extends SingleRequest implements IRequest
             $request_body .= "\r\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\r\n";
     
             if ($request->getRequestType() == 'POST') {
-
+                $json = json_encode($request->getParams());
                 $request_body .= "Content-Type: application/json; charset=utf-8 \r\n";
+                $request_body .= "Content-Length: " . strlen($json) . "\r\n";
                 $request_body .= "Accept: application/json \r\n";
-                $request_body .= "\r\n" . json_encode($request->getParams()) . "\r\n";
+                $request_body .= "\r\n" . $json . "\r\n";
                 $request_body .= "--changeset--\r\n";
 
             }
