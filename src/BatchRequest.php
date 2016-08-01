@@ -46,7 +46,7 @@ class BatchRequest extends SingleRequest implements IRequest
     
     public function constructBody()
     {
-        $request_body = '';   
+        $request_body = '';
 
         foreach ($this->_requests as $request) {
 
@@ -64,7 +64,7 @@ class BatchRequest extends SingleRequest implements IRequest
             if ($request->getRequestType() == 'POST') {
 
                 $request_body .= "Content-Type: application/json; charset=utf-8 \r\n";
-                $request_body .= "Accept: application/json \n";
+                $request_body .= "Accept: application/json \r\n";
                 $request_body .= "\r\n" . json_encode($request->getParams()) . "\r\n";
                 $request_body .= "--changeset--\r\n";
 
