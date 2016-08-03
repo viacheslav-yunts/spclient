@@ -124,10 +124,13 @@ class HttpRequest
                 $raw_headers = explode("\r\n", $raw_headers);
                 $headers = array();
                 foreach ($raw_headers as $header) {
-                //    list($name, $value) = explode(':', $header);
-                //    $headers[strtolower($name)] = ltrim($value, ' ');
+                    if (count($arr_header_info = explode(':', $header)) == 2 ) {
+                        $headers[strtolower($arr_header_info[0])] = ltrim($arr_header_info[1], ' ');
+                    }
                 }
-                echo "<pre>"; print_r($raw_headers);
+                echo "<pre>"; print_r($headers);
+                echo "<pre>"; print_r($raw_body);
+                
             }
         }
 
