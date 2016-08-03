@@ -29,7 +29,9 @@ class ResponseBodyHandler
     {
         list($request_type) = explode(';', $request_type, 1);
         if (empty($request_type)) $request_type = OdataConstants::CONTENT_TYPE_DEFAULT;
-        echo $request_type;
+        echo "<pre>" . explode(';', $request_type);
+        echo "<pre>" . explode(';', $request_type, 1);
+        //echo $request_type;
         return $request_type;
     }
 }
