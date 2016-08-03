@@ -3,14 +3,18 @@ namespace Sap\Odatalib\common;
 
 
 use Sap\Odatalib\common\OdataConstants;
-use Sap\Odatalib\SingleResponse;
-use Sap\Odatalib\MultiResponse;
-use Sap\Odatalib\BatchResponse;
-class HttpResponseHandler
+class ResponseBodyHandler
 {
     public static function parse($request_type, $content)
     {
+        $request_type = $this->checkRequestType($request_type);
+        
+        return $request_type;
+    }
 
+    public function checkRequestType($request_type)
+    {
+        if (empty($request_type)) $request_type = OdataConstants::CONTENT_TYPE_DEFAULT;
         return $request_type;
     }
 }
