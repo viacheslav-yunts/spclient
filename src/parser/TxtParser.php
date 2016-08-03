@@ -1,8 +1,7 @@
 <?php
 namespace Sap\Odatalib\parser;
 
-use Sap\Odatalib\parser\AbstractParser;
-class TxtParser extends AbstractParser
+class TxtParser
 {
     public static function parse($data)
     {

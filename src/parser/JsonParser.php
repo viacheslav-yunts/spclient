@@ -1,8 +1,7 @@
 <?php
 namespace Sap\Odatalib\parser;
 
-use Sap\Odatalib\parser\AbstractParser;
-class JsonParser extends AbstractParser
+class JsonParser
 {
     public static function parse($data)
     {
