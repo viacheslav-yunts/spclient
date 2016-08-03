@@ -96,8 +96,7 @@ class HttpRequest
 
         if (! $httpResponse = curl_exec($curlHandle)) {
 
-            echo "<pre>"; print_r(curl_error($curlHandle)); die;
-            throw new \Exception(curl_error($curlHandle));
+            $response = HttpResponseParser::parse('HTTP/1.0 403 Forbidden', curl_error($curlHandle), '');
 
         } else {
 

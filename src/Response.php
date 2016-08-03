@@ -4,6 +4,7 @@ namespace Sap\Odatalib;
 
 class Response
 {
+    private $_http_code = 200;
     private $_error  = array();
     private $_header = '';
     private $_body = '';
@@ -12,6 +13,11 @@ class Response
     {
         $this->_header = $header;
         $this->_body = $body;
+    }
+
+    public function getHttpCode()
+    {
+        return $this->_http_code;
     }
 
     public function getHeader()
