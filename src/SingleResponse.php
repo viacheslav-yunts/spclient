@@ -22,8 +22,6 @@ class SingleResponse
                 $this->_headers[strtolower($arr_header_info[0])] = ltrim($arr_header_info[1], ' ');
             } else {
 
-                $this->_headers['http_code'] = $header;
-
                 preg_match('#HTTP/\d+\.\d+ (\d+)#', $header, $matches);
                 if ( isset($matches[1])) {
                     $this->_http_code = $matches[1];
