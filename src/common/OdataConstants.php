@@ -4,6 +4,8 @@ namespace Sap\Odatalib\common;
 
 class OdataConstants
 {
+    const HTTP_CODE    = 200;
+    
     const SINGLE    = 'single';
     const MULTIPLE  = 'multi';
     const BATCH     = 'batch';
