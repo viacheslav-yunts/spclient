@@ -3,6 +3,8 @@ namespace Sap\Odatalib\common;
 
 
 use Sap\Odatalib\common\OdataConstants;
+use Sap\Odatalib\parser\JsonParser;
+use Sap\Odatalib\parser\TxtParser;
 class ResponseBodyHandler
 {
     public static function parse($request_type, $content)
@@ -14,7 +16,9 @@ class ResponseBodyHandler
                 $content = JsonParser::parse($content);
                 break;
 
+            case OdataConstants::TEXT_PLAIN :
             default :
+                $content = TxtParser::parse($content);
                 break;
         }
 
