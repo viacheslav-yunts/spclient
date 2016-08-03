@@ -118,8 +118,7 @@ class HttpRequest
 
                 // Separate content from headers
                 $part = ltrim($part, "\r\n");
-                $part_req_pos = strpos('HTTP/1', $part);
-                list($raw_headers, $raw_body) = explode("\r\n\r\n", $part_req_pos, 2);
+                list($raw_headers, $raw_body) = explode("\r\n\r\n", substr($part, strpos('HTTP/1', $part)), 2);
 
                 // Parse the headers list
                 $raw_headers = explode("\r\n", $raw_headers);
