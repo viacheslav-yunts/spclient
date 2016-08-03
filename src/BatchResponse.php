@@ -38,27 +38,19 @@ class BatchResponse
 
     private function _prepBody($body)
     {
-        $resp = false;
+        $arr_single_responses = array();
         if ($content_type = $this->getHeader('content-type')) {
             preg_match('/boundary=(.*)$/', $content_type, $matches);
             $boundary = $matches[1];
             echo "<pre>"; print_r($boundary);
-        }
-        return $resp;
-        /*
-            // grab multipart boundary from content type header
-        //preg_match('/boundary=(.*)$/', $content_type, $matches);
-        //$boundary = $matches[1];
-        //echo "<pre>"; print_r($boundary);
 
-        
             // Fetch each part
             $parts = array_slice(explode($boundary, $body), 1);
             $data = array();
 
             foreach ($parts as $part) {
                 // If this is the last part, break
-                if ($part == "--\r\n") break; 
+                if ($part == "--\r\n") break;
 
                 // Separate content from headers
                 $part = ltrim($part, "\r\n");
@@ -81,10 +73,10 @@ class BatchResponse
                     }
                 }
                 echo "<pre>"; print_r($body);
-                
-                
+
             }
-            */
+        }
+        return $arr_single_responses;
     }
     
      public function getHttpCode()
