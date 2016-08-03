@@ -7,13 +7,14 @@ class ResponseBodyHandler
 {
     public static function parse($request_type, $content)
     {
-        $request_type = $this->checkRequestType($request_type);
+        $request_type = self :: checkRequestType($request_type);
         
         return $request_type;
     }
 
-    public function checkRequestType($request_type)
+    public static function checkRequestType($request_type)
     {
+        list($request_type) = explode(';', $request_type, 1);
         if (empty($request_type)) $request_type = OdataConstants::CONTENT_TYPE_DEFAULT;
         return $request_type;
     }
