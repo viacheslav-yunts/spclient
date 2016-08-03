@@ -12,7 +12,6 @@ class HttpResponseParser
         return new Response($header, $body);
     }
 }
-
 /*
             // grab multipart boundary from content type header
             preg_match('/boundary=(.*)$/', curl_getinfo($curlHandle, CURLINFO_CONTENT_TYPE), $matches);
