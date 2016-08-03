@@ -62,7 +62,7 @@ class SingleRequest implements IRequest
     
     public function constructBody()
     {
-        return $this->_body;
+        return json_encode($this->_body);
     }
 
     /**
