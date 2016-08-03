@@ -108,30 +108,55 @@ class HttpRequest
             $boundary = $matches[1];
             echo "<pre>"; print_r($boundary);
 
-            // split content by boundary and get rid of last -- element
-            $a_data = array();
-            $a_blocks = preg_split("/-+$boundary/", $body);
-            array_pop($a_blocks);
+            // Fetch each part
+            $parts = array_slice(explode($boundary, $body), 1);
+            $data = array();
 
-            // loop data blocks
-            foreach ($a_blocks as $id => $block) {
-                if (empty($block)) continue;
+            foreach ($parts as $part) {
+                // If this is the last part, break
+                if ($part == "--\r\n") break; 
 
-                // you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
+                // Separate content from headers
+                $part = ltrim($part, "\r\n");
+                list($raw_headers, $body) = explode("\r\n\r\n", $part, 2);
 
-                // parse uploaded files
-                if (strpos($block, 'application/octet-stream') !== FALSE) {
-                    // match "name", then everything after "stream" (optional) except for prepending newlines 
-                    preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
-                } else {
-                    // match "name" and optional value in between newline sequences
-                    preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
-                }
+                // Parse the headers list
+                $raw_headers = explode("\r\n", $raw_headers);
+                $headers = array();
+                foreach ($raw_headers as $header) {
+                list($name, $value) = explode(':', $header);
+                $headers[strtolower($name)] = ltrim($value, ' '); 
+            } 
 
-                $a_data[$matches[1]] = $matches[2];
-            }
-            echo "<pre>"; print_r($a_data);
+    // Parse the Content-Disposition to get the field name, etc.
+    if (isset($headers['content-disposition'])) {
+        $filename = null;
+        preg_match(
+            '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/', 
+            $headers['content-disposition'], 
+            $matches
+        );
+        list(, $type, $name) = $matches;
+        isset($matches[4]) and $filename = $matches[4]; 
+
+        // handle your fields here
+        switch ($name) {
+            // this is a file upload
+            case 'userfile':
+                 file_put_contents($filename, $body);
+                 break;
+
+            // default for all other files is to populate $data
+            default: 
+                 $data[$name] = substr($body, 0, strlen($body) - 2);
+                 break;
+        } 
+    }
+
+}
         }
+
+        echo "<pre>"; print_r($data);
 
         curl_close($curlHandle);
 
