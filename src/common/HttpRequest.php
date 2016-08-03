@@ -110,6 +110,7 @@ class HttpRequest
 
             // Fetch each part
             $parts = array_slice(explode($boundary, $body), 1);
+            echo "<pre>"; print_r($parts);
             $data = array();
 
             foreach ($parts as $part) {
