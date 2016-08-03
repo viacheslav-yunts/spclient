@@ -35,7 +35,7 @@ abstract class AbstractResponse
 
     }
 
-    abstract protected function _prepBody();
+    abstract protected function _prepBody($body);
 
     public function getHttpCode()
     {

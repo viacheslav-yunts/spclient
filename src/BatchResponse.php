@@ -45,8 +45,4 @@ class BatchResponse extends AbstractResponse
         return $arr_single_responses;
     }
 
-    public function getData()
-    {
-        return $this->_body;
-    }
 }
