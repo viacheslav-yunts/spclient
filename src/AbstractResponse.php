@@ -73,7 +73,7 @@ abstract class AbstractResponse
         return $this->_body;
     }
 
-    private function _initMessages()
+    protected function _initMessages()
     {
         $this->_messages = [];
 
@@ -153,7 +153,7 @@ abstract class AbstractResponse
         return true;
     }
 
-    private function _convertType($type)
+    protected function _convertType($type)
     {
         switch ($type) {
 
