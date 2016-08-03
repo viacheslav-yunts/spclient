@@ -1,8 +1,8 @@
 <?php 
 namespace Sap\Odatalib\common;
 
-
-//use Sap\Odatalib\common\UrlEncodeTrait;
+require_once('functions.php');
+use Sap\Odatalib\common\HttpResponseParser;
 use Sap\Odatalib\config\BaseSapConfig;
 class HttpRequest
 {
@@ -50,15 +50,16 @@ class HttpRequest
         return array(
             'url'       => $this->_url,
             'header'    => $this->_headers,
-            'body'      => $this->_body,
+            'body'      => (isJson($this->_body))?json_decode($this->_body,TRUE):$this->_body,
             'config'    => $this->_config
         );
     }
 
     public function execute()
     {
+
         $curlHandle = curl_init();
-        
+
         curl_setopt($curlHandle, CURLOPT_URL, $this->url_encode($this->_url)); 
         curl_setopt($curlHandle, CURLOPT_USERPWD, $this->_config->getLogin() . ":" . $this->_config->getPassword());
         curl_setopt($curlHandle, CURL_HTTP_VERSION_1_1, true);
@@ -94,57 +95,19 @@ class HttpRequest
         }
 
         if (! $httpResponse = curl_exec($curlHandle)) {
+
+            echo "<pre>"; print_r(curl_error($curlHandle)); die;
             throw new \Exception(curl_error($curlHandle));
+
         } else {
-            //$info = curl_getinfo($curlHandle);
-            //echo "<pre>"; print_r($info); 
 
             $header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
-            $body = substr($httpResponse, $header_size);
-            //echo "<pre>"; print_r($body);
+            $response = HttpResponseParser::parse(substr($httpResponse, 0, $header_size), substr($httpResponse, $header_size), curl_getinfo($curlHandle, CURLINFO_CONTENT_TYPE));
 
-            // grab multipart boundary from content type header
-            preg_match('/boundary=(.*)$/', curl_getinfo($curlHandle, CURLINFO_CONTENT_TYPE), $matches);
-            $boundary = $matches[1];
-            echo "<pre>"; print_r($boundary);
-
-            // Fetch each part
-            $parts = array_slice(explode($boundary, $body), 1);
-            $data = array();
-
-            foreach ($parts as $part) {
-                // If this is the last part, break
-                if ($part == "--\r\n") break; 
-
-                // Separate content from headers
-                $part = ltrim($part, "\r\n");
-                list($raw_headers, $raw_body) = explode("\r\n\r\n", substr($part, strpos($part,'HTTP/1')), 2);
-
-                // Parse the headers list
-                $raw_headers = explode("\r\n", $raw_headers);
-                $headers = array();
-                foreach ($raw_headers as $header) {
-                    if (count($arr_header_info = explode(':', $header)) == 2 ) {
-                        $headers[strtolower($arr_header_info[0])] = ltrim($arr_header_info[1], ' ');
-                    }
-                }
-                echo "<pre>"; print_r($headers);
-                
-                $raw_body = explode("\r\n", $raw_body);
-                foreach ($raw_body as $str) {
-                    if (is_string($str) && is_array(json_decode($str, true)) && (json_last_error() == JSON_ERROR_NONE)) {
-                        $body = $str;
-                    }
-                }
-                echo "<pre>"; print_r($body);
-                
-            }
         }
-
-        //echo "<pre>"; print_r($data);
 
         curl_close($curlHandle);
 
-        return $httpResponse;
+        return $response;
     }
 }
