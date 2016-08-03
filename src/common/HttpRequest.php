@@ -94,16 +94,43 @@ class HttpRequest
         }
 
         if (! $httpResponse = curl_exec($curlHandle)) {
-            trigger_error(curl_error($curlHandle));
+            throw new \Exception(curl_error($curlHandle));
         } else {
-            $info = curl_getinfo($curlHandle);
-            echo "<pre>"; print_r($info); 
-            
+            //$info = curl_getinfo($curlHandle);
+            //echo "<pre>"; print_r($info); 
+
             $header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
             $body = substr($httpResponse, $header_size);
             echo "<pre>"; print_r($body);
-        
-        } 
+
+            // grab multipart boundary from content type header
+            preg_match('/boundary=(.*)$/', curl_getinfo($curlHandle, CURLINFO_CONTENT_TYPE), $matches);
+            $boundary = $matches[1];
+            echo "<pre>"; print_r($boundary);
+
+            // split content by boundary and get rid of last -- element
+            $a_blocks = preg_split("/-+$boundary/", $body);
+            array_pop($a_blocks);
+
+            // loop data blocks
+            foreach ($a_blocks as $id => $block) {
+                if (empty($block)) continue;
+
+                // you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
+
+                // parse uploaded files
+                if (strpos($block, 'application/octet-stream') !== FALSE) {
+                    // match "name", then everything after "stream" (optional) except for prepending newlines 
+                    preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
+                } else {
+                    // match "name" and optional value in between newline sequences
+                    preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
+                }
+
+                $a_data[$matches[1]] = $matches[2];
+            }
+            echo "<pre>"; print_r($a_data);
+        }
 
         curl_close($curlHandle);
 
