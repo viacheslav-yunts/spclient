@@ -30,6 +30,11 @@ class SingleResponse
         return $this->_body;
     }
 
+    public function getData()
+    {
+        return json_decode($this->_body);
+    }
+
     public function hasError()
     {
         return count($this->_error);
