@@ -5,6 +5,7 @@ use Sap\Odatalib\common\ResponseBodyHandler;
 class SingleResponse
 {
     private $_http_code = 200;
+    private $_http_text = '';
     private $_error  = array();
     private $_headers = array();
     private $_body = '';
@@ -18,6 +19,16 @@ class SingleResponse
         foreach ($headers as $header) {
             if (count($arr_header_info = explode(':', $header)) == 2 ) {
                 $this->_headers[strtolower($arr_header_info[0])] = ltrim($arr_header_info[1], ' ');
+            } else {
+
+                $this->_headers['http_code'] = $header;
+
+                preg_match('#HTTP/\d+\.\d+ (\d+)#', $header, $matches);
+                if ( isset($matches[1])) {
+                    $this->_http_code = $matches[1];
+                    $this->_http_text = trim(str_replace($matches[0], '', $header));
+                }
+
             }
         }
 
@@ -27,6 +38,11 @@ class SingleResponse
     public function getHttpCode()
     {
         return $this->_http_code;
+    }
+
+    public function getHttpCodeText()
+    {
+        return $this->_http_text;
     }
 
     public function getHeader($header_name)
