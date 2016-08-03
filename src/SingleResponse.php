@@ -33,7 +33,7 @@ class SingleResponse
             }
         }
 
-        $this->_body = ResponseBodyHandler :: parse($this->getHeader('content-type'), $this->_body);
+        $this->_body = ResponseBodyHandler :: parse($this->getHeader('content-type'), $body);
 
         $this->_initMessages();
     }
