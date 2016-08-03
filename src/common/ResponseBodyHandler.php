@@ -27,11 +27,9 @@ class ResponseBodyHandler
 
     public static function checkRequestType($request_type)
     {
+        print_r($request_type); 
         list($type) = explode(';', $request_type, 1);
         if (empty($type)) $type = OdataConstants::CONTENT_TYPE_DEFAULT;
-        echo "<pre>" . explode(';', $request_type);
-        echo "<pre>" . explode(';', $request_type, 1);
-        //echo $request_type;
         return $type;
     }
 }
