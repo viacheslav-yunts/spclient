@@ -4,5 +4,5 @@ namespace Sap\Odatalib\parser;
 
 interface IParser
 {
-    public static function parse($data);
+    public function parse($data);
 }
