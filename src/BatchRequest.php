@@ -84,7 +84,10 @@ class BatchRequest extends SingleRequest implements IRequest
     
     
     
-    
+    public function getRequestType()
+    {
+        return $this->_request_type;
+    }
     /**
     * function buildQuery()
     * 
