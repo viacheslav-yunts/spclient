@@ -118,6 +118,8 @@ class HttpRequest
 
                 // Separate content from headers
                 $part = ltrim($part, "\r\n");
+                echo "<pre>"; print_r(strpos('HTTP/1', $part));
+                echo "<pre>"; print_r(substr($part, strpos('HTTP/1', $part)));
                 list($raw_headers, $raw_body) = explode("\r\n\r\n", substr($part, strpos('HTTP/1', $part)), 2);
 
                 // Parse the headers list
@@ -129,12 +131,12 @@ class HttpRequest
                     }
                 }
                 echo "<pre>"; print_r($headers);
-                echo "<pre>"; print_r($raw_body);
+                //echo "<pre>"; print_r($raw_body);
                 
             }
         }
 
-        echo "<pre>"; print_r($data);
+        //echo "<pre>"; print_r($data);
 
         curl_close($curlHandle);
 
