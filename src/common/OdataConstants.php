@@ -10,4 +10,7 @@ class OdataConstants
     
     const FORMAT_DEFAULT = 'json';
     const CONTENT_TYPE_DEFAULT = 'application/json';
+    
+    
+    const APPLICATION_JSON = 'application/json';
 }

@@ -7,9 +7,18 @@ class ResponseBodyHandler
 {
     public static function parse($request_type, $content)
     {
-        $request_type = self :: checkRequestType($request_type);
-        
-        return $request_type;
+
+        switch (self :: checkRequestType($request_type)) {
+
+            case OdataConstants::APPLICATION_JSON :
+                $content = JsonParser::parse($content);
+                break;
+
+            default :
+                break;
+        }
+
+        return $content;
     }
 
     public static function checkRequestType($request_type)
