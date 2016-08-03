@@ -1,7 +1,7 @@
 <?php
 namespace Sap\Odatalib;
 
-require_once('./common/functions.php');
+require_once('common/functions.php');
 use Sap\Odatalib\SingleResponse;
 class BatchResponse
 {
