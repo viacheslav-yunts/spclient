@@ -4,6 +4,7 @@ namespace Sap\Odatalib;
 use Sap\Odatalib\common\ResponseBodyHandler;
 class SingleResponse
 {
+    private $_error = false;
     private $_http_code = 200;
     private $_http_text = '';
     private $_messages  = array();
@@ -65,7 +66,7 @@ class SingleResponse
 
     public function hasError()
     {
-        return count($this->_messages);
+        return (bool) $this->_error;
     }
 
     public function getMessages()
@@ -139,16 +140,46 @@ class SingleResponse
         if (is_object($params)) {
             $this->_messages[] = array( 
                 'message'   =>  ($url_encode)?urldecode( str_replace("'","", $params->message) ):$params->message,
-                'type'      =>  $params->severity,
+                'type'      =>  $this->_convertType($params->severity),
             ); 
         } elseif (is_array($params)) {
             foreach($params as $m) {
                 $this->_messages[] = array( 
                     'message'   =>  ($url_encode)?urldecode( str_replace("'","", $m->message) ):$m->message,
-                    'type'      =>  $m->severity,
+                    'type'      =>  $this->_convertType($m->severity),
                 ); 
             }
         }
+        
         return true;
+    }
+
+    private function _convertType($type)
+    {
+        switch ($type) {
+
+            case 'abort':
+                $type = 'A';
+                $this->_error = TRUE;
+                break;
+
+            case 'info':
+                $type = 'S';
+                break;
+
+            case 'warning':
+                $type = 'A';
+                $this->_error = TRUE;
+                break;
+
+            case 'error':
+            default:
+                $type = 'E';
+                $this->_error = TRUE;
+                break;
+
+        }
+
+        return $type;
     }
 }
