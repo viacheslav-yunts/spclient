@@ -2,7 +2,7 @@
 namespace Sap\Odatalib\common;
 
 
-namespace Sap\Odatalib\Response;
+use Sap\Odatalib\Response;
 class HttpResponseParser
 {
     public static function parse($header, $body, $content_type)
