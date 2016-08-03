@@ -2,22 +2,41 @@
 namespace Sap\Odatalib\common;
 
 
-use Sap\Odatalib\Response;
-class HttpResponseParser
+use Sap\Odatalib\common\OdataConstants;
+use Sap\Odatalib\SingleResponse;
+use Sap\Odatalib\MultiResponse;
+use Sap\Odatalib\BatchResponse;
+class HttpResponseHandler
 {
-    public static function parse($header, $body, $content_type)
+    public static function parse($request_type, $header, $body)
     {
-        echo "<pre>"; print_r($header);
-        echo "<pre>"; print_r($body);
-        return new Response($header, $body);
+
+        switch ($request_type) {
+
+            case OdataConstants::MULTIPLE : 
+                $resp = new MultiResponse($header, $body);
+                break;
+
+            case OdataConstants::BATCH : 
+                $resp = new BatchResponse($header, $body);
+                break;
+
+            case OdataConstants::SINGLE : 
+            default :
+                $resp = new SingleResponse($header, $body);
+                break;
+        }
+
+        return $resp;
     }
 }
 /*
             // grab multipart boundary from content type header
-            preg_match('/boundary=(.*)$/', curl_getinfo($curlHandle, CURLINFO_CONTENT_TYPE), $matches);
-            $boundary = $matches[1];
-            echo "<pre>"; print_r($boundary);
+        //preg_match('/boundary=(.*)$/', $content_type, $matches);
+        //$boundary = $matches[1];
+        //echo "<pre>"; print_r($boundary);
 
+        
             // Fetch each part
             $parts = array_slice(explode($boundary, $body), 1);
             $data = array();

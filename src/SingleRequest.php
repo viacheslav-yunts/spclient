@@ -2,10 +2,13 @@
 namespace Sap\Odatalib;
 
 
+use Sap\Odatalib\common\OdataConstants;
 use Sap\Odatalib\IRequest;
 use Sap\Odatalib\config\BaseSapConfig;
 class SingleRequest implements IRequest
 {
+    protected $_type = OdataConstants::SINGLE;
+
     // вызываемы url    
     private $_url = null;
     // config

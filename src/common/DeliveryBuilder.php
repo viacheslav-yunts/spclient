@@ -3,7 +3,8 @@ namespace Sap\Odatalib\common;
 
 
 use Sap\Odatalib\IRequest;
-use Sap\Odatalib\common\HttpRequest;
+use Sap\Odatalib\common\OdataConstants;
+use Sap\Odatalib\common\HttpRequestHandler;
 class DeliveryBuilder
 {
     private   $_http = null;
@@ -12,7 +13,17 @@ class DeliveryBuilder
     public function __construct(IRequest $request)
     {
         $this -> _request = $request;
-        $this -> _http = new HttpRequest($this -> _request -> getConfig());
+        switch ($this -> _request->getRequestType()) {
+            case OdataConstants::MULTIPLE :
+                // не работает
+                $this -> _http = new HttpRequestHandler($this -> _request -> getConfig());
+                break;
+            case OdataConstants::SINGLE :
+            case OdataConstants::BATCH :
+            default :
+               $this -> _http = new HttpRequestHandler($this -> _request->getRequestType(), $this -> _request -> getConfig());
+               break;
+        }
     }
 
     public function checkProxy()

@@ -2,10 +2,13 @@
 namespace Sap\Odatalib;
 
 
+use Sap\Odatalib\common\OdataConstants;
 use Sap\Odatalib\IRequest;
 use Sap\Odatalib\SingleRequest;
 class MultiRequest implements IRequest
 {
+    protected $_type = OdataConstants::MULTIPLE;
+
     private $_requests = array();
 
     public function add(SingleRequest $single_request, $key = null) 

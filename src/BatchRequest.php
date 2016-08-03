@@ -2,11 +2,14 @@
 namespace Sap\Odatalib;
 
 
+use Sap\Odatalib\common\OdataConstants;
 use Sap\Odatalib\IRequest;
 use Sap\Odatalib\SingleRequest;
 use Sap\Odatalib\BatchSubRequest;
 class BatchRequest extends SingleRequest implements IRequest
 {
+    protected $_type = OdataConstants::BATCH;
+
     public $_requests = array();
 
     public function add(BatchSubRequest $single_request, $key = null) 

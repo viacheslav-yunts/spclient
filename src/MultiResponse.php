@@ -2,7 +2,7 @@
 namespace Sap\Odatalib;
 
 
-class Response
+class MultiResponse
 {
     private $_http_code = 200;
     private $_error  = array();
@@ -30,7 +30,7 @@ class Response
         return $this->_body;
     }
 
-    public function hasErrors()
+    public function hasError()
     {
         return count($this->_error);
     }
