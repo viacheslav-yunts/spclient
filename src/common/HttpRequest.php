@@ -109,6 +109,7 @@ class HttpRequest
             echo "<pre>"; print_r($boundary);
 
             // split content by boundary and get rid of last -- element
+            $a_data = array();
             $a_blocks = preg_split("/-+$boundary/", $body);
             array_pop($a_blocks);
 
