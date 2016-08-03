@@ -101,7 +101,7 @@ class HttpRequest
 
             $header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
             $body = substr($httpResponse, $header_size);
-            echo "<pre>"; print_r($body);
+            //echo "<pre>"; print_r($body);
 
             // grab multipart boundary from content type header
             preg_match('/boundary=(.*)$/', curl_getinfo($curlHandle, CURLINFO_CONTENT_TYPE), $matches);
@@ -118,9 +118,9 @@ class HttpRequest
 
                 // Separate content from headers
                 $part = ltrim($part, "\r\n");
-                echo "<pre>"; print_r(strpos('HTTP/1', $part));
-                echo "<pre>"; print_r(substr($part, strpos('HTTP/1', $part)));
-                list($raw_headers, $raw_body) = explode("\r\n\r\n", substr($part, strpos('HTTP/1', $part)), 2);
+                echo "<pre>"; print_r(strpos($part,'HTTP/1'));
+                echo "<pre>"; print_r(substr($part, strpos($part,'HTTP/1')));
+                list($raw_headers, $raw_body) = explode("\r\n\r\n", substr($part, strpos($part,'HTTP/1')), 2);
 
                 // Parse the headers list
                 $raw_headers = explode("\r\n", $raw_headers);
