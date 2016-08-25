@@ -18,7 +18,7 @@ abstract class AbstractResponse
         // Parse the headers list
         $headers = explode("\r\n", $headers);
         foreach ($headers as $header) {
-            if (count($arr_header_info = explode(':', $header)) == 2 ) {
+            if (count($arr_header_info = explode(':', $header, 2)) == 2 ) {
                 $this->_headers[strtolower($arr_header_info[0])] = ltrim($arr_header_info[1], ' ');
             } else {
 
