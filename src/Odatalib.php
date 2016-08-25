@@ -15,6 +15,7 @@ use Sap\Odatalib\common\DeliveryDirector;
 */
 class Odatalib 
 {
+    protected $_connection_config = null;
 
     /**
     * создать объект запроса
@@ -64,7 +65,8 @@ class Odatalib
     public function createConnectionConfig($connection_system = '', $connection_type = '', $config_file_path = '')
     {
         $config_factory = new ConfigFactory();
-        return $config_factory->create($connection_system, $connection_type, $config_file_path);
+        $this->_connection_config = $config_factory->create($connection_system, $connection_type, $config_file_path);
+        return $this->_connection_config;
     }
 
     /**
