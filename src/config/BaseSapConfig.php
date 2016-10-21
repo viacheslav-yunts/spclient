@@ -78,6 +78,16 @@ abstract class BaseSapConfig implements BaseConfig
     protected $writelog;
 
     /**
+     * @var array
+     */
+    protected $writelogbylogin;
+
+    /**
+     * @var array
+     */
+    protected $writelogbyservice;
+
+    /**
      * @var int
      */
     protected $active;
@@ -318,6 +328,40 @@ abstract class BaseSapConfig implements BaseConfig
     public function setWritelog($writelog)
     {
         $this->writelog = $writelog;
+        return $this;
+    }
+    
+    /**
+     * @return mixed
+     */
+    public function getWritelogbylogin()
+    {
+        return (array) $this->writelogbylogin;
+    }
+    /**
+     * @param $writelogbylogin
+     * @return $this
+     */
+    public function setWritelogbylogin($writelogbylogin)
+    {
+        $this->writelogbylogin = (array) $writelogbylogin;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWritelogbyservice()
+    {
+        return (array) $this->writelogbyservice;
+    }
+    /**
+     * @param $writelogbyservice
+     * @return $this
+     */
+    public function setWritelogbyservice($writelogbyservice)
+    {
+        $this->writelogbyservice = (array) $writelogbyservice;
         return $this;
     }
 
