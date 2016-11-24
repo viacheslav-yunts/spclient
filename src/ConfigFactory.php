@@ -1,15 +1,10 @@
 <?php
-/**
- * class ConfigFactory
- *
- * @package OdataLib
- * @author Hrynchyshyn Uladzimir
- * @version 1.0
- *
- */
 
 namespace Sap\Odatalib;
 
+use Sap\Odatalib\config\BaseConfig;
+use Sap\Odatalib\config\BaseSapConfig;
+use Sap\Odatalib\config\BaseCrmConfig;
 
 /**
  * Класс - фабрика для генерации и получения объекта, содержащего информацию из конфигурационных массивов
@@ -19,10 +14,15 @@ namespace Sap\Odatalib;
  *      $config = $connection->create('sap', 'default');
  *
  * Class ConfigFactory
+ *
  * @package connection
+ * @author U.Hrynchyshyn
  */
 class ConfigFactory
 {
+    /* Доступные расширения конфигурационных файлов */
+    const AVAILABLE_FILE_EXTENSIONS = ['yml', 'php'];
+
     /* Дефолтное значение системы (sap, crm, etc) */
     const DEFAULT_SYSTEM = 'sap';
 
@@ -44,12 +44,10 @@ class ConfigFactory
     protected $connectionType;
 
     /**
-     * Среда разработки (development, production, testing)
-     *
      * @var string
      */
-    protected $environment;
-    
+    protected $configurationFile;
+
     /**
      * @return string
      */
@@ -85,136 +83,127 @@ class ConfigFactory
     /**
      * @return string
      */
-    public function getEnvironment()
+    public function getConfigurationFile()
     {
-        return $this->environment;
+        return $this->configurationFile;
     }
 
     /**
-     * @param string $environment
+     * @param $configurationFile
      */
-    public function setEnvironment($environment)
+    public function setConfigurationFile($configurationFile)
     {
-        $this->environment = $environment;
+        $this->configurationFile = $configurationFile;
     }
 
     /**
-     * ConfigFactory constructor.
-     *
-     */
-    public function __construct()
-    {
-
-    }
-
-    /**
-     * Создание объекта, содержащего в себе данные запрашиваемого соединения из кофигурационного массива.
-     *
      * @param string $system
      * @param string $connectionType
-     * @return mixed
-     * @throws \Exception
-     */
-    public function create($system = 'sap', $connectionType = 'default', $pathToConnectionFolder = null){
-
-        if (is_null($pathToConnectionFolder)) {
-            throw new \Exception('Неопределен путь к конфигурационным файлам');
-        }
-
-        $this->setSystem(ucfirst($system));
-        $this->setConnectionType(ucfirst($connectionType));
-
-        /*
-         * Значения переменных ($system и $connectionType) будут актуальны для ситуации,
-         * когда класс - обработчик конфига не создан или создан неверно, а секция настроек данного конфига
-         * имеется в конфигурационном массиве и при этом валидна. Таким образом на базе дефолтного класса обработчика
-         * будет создан конфигурационный объект, заполненный данными из соответствующей секции конфигурационного массива
-         */
-        $system = strtolower($this->getSystem());
-        $connectionType = strtolower($this->getConnectionType());
-
-        /* Проверяем тип подключения (default - да, нет)*/
-        if ($this->getConnectionType() != ucfirst(self::DEFAULT_CONNECTION_TYPE)) {
-            if (file_exists($this->getFilename())) {
-                include_once ($this->getFilename());
-                $className = $this->getFullClassName();
-
-                if (class_exists($className)) {
-                    $config = new $className($this->getSystem(), strtolower($this->getConnectionType()),
-                                             $this->getConfigurationFilePath($pathToConnectionFolder));
-                    return $config->getConfig();
-                }
-            }
-        }
-
-        /* 
-        *  В случае не дефолтного типа подключения, или же не прохождения какой-либо вышенаписанной проверки,
-        *  пытаемся подключиться по default
-        */
-        $this->setConnectionType(ucfirst(self::DEFAULT_CONNECTION_TYPE));
-        return $this->createDefault($system, $connectionType, $pathToConnectionFolder);
-    }
-
-    /**
-     * Создание объекта дефолного соединения из кофигурационного массива
+     * @param null $pathToConnectionFile
      *
-     * @return mixed
      * @throws \Exception
      */
-    protected function createDefault($system = self::DEFAULT_SYSTEM, $connectionType = self::DEFAULT_CONNECTION_TYPE,
-                                     $pathToConnectionFolder = null)
+    public function create($system = 'sap', $connectionType = 'default', $pathToConnectionFile = null)
     {
-        if (file_exists($this->getFilename())) {
-            include_once ($this->getFilename());
-            $className = $this->getFullClassName();
+        $this->setSystem($system);
+        $this->setConnectionType($connectionType);
+        $this->setConfigurationFile($pathToConnectionFile);
 
-            if (class_exists($className)) {
-                $config = new $className( $this->getSystem($this->setSystem($system)),
-                                          strtolower($this->getConnectionType($this->setConnectionType($connectionType))),
-                                          $this->getConfigurationFilePath($pathToConnectionFolder)
-                );
-                return $config->getConfig();
+        if (file_exists($this->getConfigurationFile())) {
+
+            $configClassName = $this->getFullClassName();
+            if (class_exists($configClassName)) {
+                $configObject = new $configClassName($this->getSystem(), $this->getConnectionType(), $this->getConfigurationFile());
+
+                $pathInfo = pathinfo($this->getConfigurationFile());
+                $fileExtension = !empty($pathInfo['extension']) ? $pathInfo['extension'] : false;
+                if ($fileExtension) {
+
+                    if (in_array($fileExtension, self::AVAILABLE_FILE_EXTENSIONS)) {
+                        
+                        $connectionsSettings = [];
+                        if ($fileExtension == 'php') {
+                            include_once ($this->getConfigurationFile());
+                        } elseif ($fileExtension == 'yml') {
+                            $connectionsSettings = yaml_parse_file($pathToConnectionFile);
+                        }
+
+                        if (is_array($connectionsSettings) && !empty($connectionsSettings)) {
+                            return  $this->getConfigFromFile($connectionsSettings, $configObject);
+                        } else {
+                            throw new \Exception("Ошибка парсинга $fileExtension файла");
+                        }
+                        
+                    } else {
+                        throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
+                    }
+
+                } else {
+                    throw new \Exception("Не установленно расширение конфигурационного файла");
+                }
+
             } else {
-                throw new \Exception("Не найден класс-обработчик конфигурационных данных");
+                throw new \Exception("Класс $configClassName (config object) не найден");
             }
+
         } else {
-            throw new \Exception("Не найден файл-обработчик конфигурационных данных");
+            throw new \Exception("Не найден конфигурационный файл");
         }
     }
 
     /**
-     * Возвращает имя класса, который будет генерировать конфигурационный объект
      * @return string
      */
-    protected function getConfigClassName()
+    public function getConfigClassName()
     {
-        return $this->getSystem() . $this->getConnectionType() . 'Config';
+        return 'Base' . ucfirst($this->getSystem()) . 'Config';
     }
 
     /**
-     * Возвращает полный путь к файлу, который содержит класс генерирующий конфигурационный объект
-     * @return string
-     */
-    protected function getFilename()
-    {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $this->getSystem() . DIRECTORY_SEPARATOR . $this->getConnectionType() .'Config' . DIRECTORY_SEPARATOR . $this->getConfigClassName() .'.php';
-    }
-
-    /**
-     * Возвращает полное имя класса (с полным неймспейсом), который будет генерировать конфигурационный объект
      * @return string
      */
     protected function getFullClassName()
     {
-        return __NAMESPACE__ . '\\config\\' . $this->getSystem() . '\\' . $this->getConnectionType() . 'Config\\' . $this->getConfigClassName();
+        return __NAMESPACE__ . '\\config\\'  . $this->getConfigClassName();
     }
 
     /**
-     * Возвращает динамически генерируемый путь к конфигурационному файлу , который содержит массив с конфигурационными данными
-     * @return string
+     * @param array $connectionsSettings
+     * @param BaseConfig $configObject
+     *
+     * @return mixed
+     *
+     * @throws \Exception
      */
-    protected function getConfigurationFilePath($pathToConnectionFolder)
+    public function getConfigFromFile(array $connectionsSettings, BaseConfig $configObject)
     {
-        return $pathToConnectionFolder . DIRECTORY_SEPARATOR . strtolower($this->getSystem()) . DIRECTORY_SEPARATOR . 'connections.php';
+        if (!empty($connectionsSettings['parameters']['armtek_connections'][$this->getSystem()][$this->getConnectionType()])) {
+            if ($connectionsSettings['parameters']['armtek_connections'][$this->getSystem()][$this->getConnectionType()]['active'] == 1) {
+                return $configObject->getConfig($connectionsSettings['parameters']['armtek_connections'][$this->getSystem()][$this->getConnectionType()]);
+            }
+        }
+
+        $defaultConnection = $this->getDefaultConnectionFromFile($connectionsSettings['parameters']['armtek_connections'][$this->getSystem()]);
+        if ($defaultConnection) {
+            return $configObject->getConfig($defaultConnection);
+        } else {
+            throw new \Exception('Не установлено дефолтное соединение для системы ' . $this->getSystem() . ' и типа соединения ' . $this->getConnectionType());
+        }
+    }
+
+    /**
+     * @param array $connectionsSystemSettings
+     *
+     * @return bool|array
+     */
+    protected function getDefaultConnectionFromFile(array $connectionsSystemSettings)
+    {
+        foreach ($connectionsSystemSettings as $connectionType => $connectionSettings) {
+            if (($connectionSettings['default'] == 1) && ($connectionSettings['active'] == 1)) {
+                return $connectionSettings;
+            }
+        }
+
+        return false;
     }
 }

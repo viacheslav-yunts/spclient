@@ -2,11 +2,11 @@
 
 namespace Sap\Odatalib\config;
 
-class BaseSapConfig extends BaseConfig
+class BaseCrmConfig extends BaseConfig
 {
     /**
      * SapConfig constructor.
-     * 
+     *
      * @param string $system
      * @param string $connectionType
      * @param string $configurationFile
@@ -20,9 +20,9 @@ class BaseSapConfig extends BaseConfig
 
     /**
      * @param array $parameters
-     * 
+     *
      * @return $this
-     * 
+     *
      * @throws \Exception
      */
     public function getConfig(array $parameters)
