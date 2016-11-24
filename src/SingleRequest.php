@@ -4,7 +4,7 @@ namespace Sap\Odatalib;
 
 use Sap\Odatalib\common\OdataConstants;
 use Sap\Odatalib\IRequest;
-use Sap\Odatalib\config\BaseSapConfig;
+use Sap\Odatalib\config\BaseConfig;
 class SingleRequest implements IRequest
 {
     protected $_type = OdataConstants::SINGLE;
@@ -32,7 +32,7 @@ class SingleRequest implements IRequest
     // запрос
     private $_body = array();
     
-    public function __construct(string $url, BaseSapConfig $config, $request_type = 'GET')
+    public function __construct(string $url, BaseConfig $config, $request_type = 'GET')
     {
         $this->_config = $config;
         $this->setUrl($url);

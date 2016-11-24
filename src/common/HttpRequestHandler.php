@@ -3,7 +3,7 @@ namespace Sap\Odatalib\common;
 
 require_once('functions.php');
 use Sap\Odatalib\common\HttpResponseHandler;
-use Sap\Odatalib\config\BaseSapConfig;
+use Sap\Odatalib\config\BaseConfig;
 class HttpRequestHandler
 {
     use UrlEncodeTrait;
@@ -16,7 +16,7 @@ class HttpRequestHandler
     private $_headers = false;
     private $_body = false;
 
-    public function __construct($request_type, BaseSapConfig $connection_config)
+    public function __construct($request_type, BaseConfig $connection_config)
     {
         $this->_request_type = $request_type;
         $this->_config = $connection_config;
