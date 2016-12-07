@@ -123,7 +123,7 @@ class ConfigFactory
                         
                         $connectionsSettings = [];
                         if ($fileExtension == 'php') {
-                            include_once ($this->getConfigurationFile());
+                            include ($this->getConfigurationFile());
                         } elseif ($fileExtension == 'yml') {
                             $connectionsSettings = yaml_parse_file($pathToConnectionFile);
                         }
