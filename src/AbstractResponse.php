@@ -94,11 +94,8 @@ abstract class AbstractResponse
         // response messages
         if (! empty($this->_headers['sap-message'])) {
             $messages =  json_decode($this->_headers['sap-message']);
-            if (! empty($messages->details)) {
-                $this->setMessages($messages->details, true);
-            } else {
-                $this->setMessages($messages, true);
-            }
+            if (! empty($messages->message)) $this->setMessages($messages, true);
+            if (! empty($messages->details)) $this->setMessages($messages->details, true);
         }
 
         // 404 internall error
