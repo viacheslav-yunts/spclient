@@ -228,13 +228,13 @@ class SingleRequest implements IRequest
     } 
     public function addFiltr($param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and') {
         if (is_array($param_value)) {
-            $qw = ($is_q)?"'":"'";
+            $qw = ($is_q) ? "'" : "'";
             $p_value = ( count( $param_value ) == 1 )?'':'(';
             $p_value .= $param_name.' '.$param_type.' '.$qw.implode("$qw $arr_type $param_name $param_type $qw", $param_value).$qw;
             $p_value .= ( count( $param_value ) == 1 )?'':')';
             $this->Filter( $p_value ); 
         } else {
-            if ($is_q) $p_value = "'" . trim($param_value) . "'";
+            $p_value = ($is_q) ? "'" . trim($param_value) . "'" : trim($param_value);
             $this->Filter($param_name . ' ' . $param_type . ' ' . $p_value, $arr_type);
         }
     }
