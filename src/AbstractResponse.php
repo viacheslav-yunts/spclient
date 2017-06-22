@@ -85,7 +85,7 @@ abstract class AbstractResponse
                 $this->setMessages(
                     (object) [
                         'message'  => $this->_body->error->message->value,
-                        'severity'  => 'warning',
+                        'severity'  => 'abort',
                     ]
                 );
             }
@@ -104,7 +104,7 @@ abstract class AbstractResponse
                 $this->setMessages(
                     (object) [
                         'message'  => $this->getHttpCodeText(),
-                        'severity'  => 'warning',
+                        'severity'  => 'abort',
                     ]
                 );
             }
@@ -115,7 +115,7 @@ abstract class AbstractResponse
             $this->setMessages( 
                 (object) [
                     'message'  => $this->_body->code[0]->__toString(),
-                    'severity'  => 'warning',
+                    'severity'  => 'abort',
                 ]
             );
         }
@@ -164,8 +164,9 @@ abstract class AbstractResponse
                 break;
 
             case 'warning':
-                $type = 'A';
-                $this->_error = TRUE;
+                $type = 'I';
+                //$type = 'A';
+                //$this->_error = TRUE;
                 break;
 
             case 'error':
