@@ -164,7 +164,7 @@ abstract class AbstractResponse
                 break;
 
             case 'warning':
-                $type = 'I';
+                $type = 'W';
                 //$type = 'A';
                 //$this->_error = TRUE;
                 break;
