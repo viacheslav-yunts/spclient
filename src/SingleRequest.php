@@ -214,6 +214,7 @@ class SingleRequest implements IRequest
     {
         return $this->AddQueryOption('$format', $expression);
     }
+
     /**
     * $filter=<выражение>     
     * Выражение позволяет ограничивать результаты, возвращаемые запросом 
@@ -224,9 +225,11 @@ class SingleRequest implements IRequest
     */
     public function Filter($expression, $operation_type = 'and')
     {
-        $this->_systemQueryOptions['$filter'] .= empty( $this->_systemQueryOptions['$filter'] )?$expression:' '.$operation_type.' '.$expression;
-    } 
-    public function addFiltr($param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and') {
+        $this->_systemQueryOptions['$filter'] .= empty($this->_systemQueryOptions['$filter']) ? $expression : ' ' . $operation_type . ' ' . $expression;
+    }
+
+    public function addFiltr($param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and')
+    {
         if (is_array($param_value)) {
             $qw = ($is_q) ? "'" : "'";
             $p_value = ( count( $param_value ) == 1 )?'':'(';
@@ -236,6 +239,51 @@ class SingleRequest implements IRequest
         } else {
             $p_value = ($is_q) ? "'" . trim($param_value) . "'" : trim($param_value);
             $this->Filter($param_name . ' ' . $param_type . ' ' . $p_value, $arr_type);
+        }
+    }
+
+    /**
+    * 
+    * @method addFiltrGroup - добавление группы параметров в фильтр
+    * @example $odata->addFiltrGroup($param_settings, $operation_type);
+    * 
+    * @param array $param_settings - настройки параметров группы
+    * <code>
+    * <?php
+    * $param_settings = [
+    *     [
+    *         'param' => 'VKORG',         // наименование параметра
+    *         'value' => '2000',          // значение параметра
+    *         'operator' => 'eq',         // оператор сравнения параметра (по умолчания равен "eq")
+    *         'is_q' => false,            // признак обрамления значения в ковычки (по умолчания равен "false")
+    *         'logic_operator' => 'and',  // логический оператов связывания списка параметров между собой (по умолчания равен "and")
+    *     ],
+    * ];
+    * ?>
+    * </code>
+    * @param string $operation_type - оператор для добавления группы в общий фильтр (по умолчания равен "and")
+    */
+    public function addFiltrGroup($param_settings, $operation_type = 'and')
+    {
+        if (is_array($param_settings) && ! empty($param_settings)) {
+
+            $expression = '';
+            $logic_operator = '';
+
+            foreach ($param_settings as $key => $settings) {
+                $param = isset($settings['param']) ? (string) $settings['param'] : '';
+                if (! empty($param)) {
+                    $value = isset($settings['value']) ? (string) $settings['value'] : '';
+                    $operator = ! empty($settings['operator']) ? (string) $settings['operator'] : 'eq';
+                    $is_q = ! empty($settings['is_q']) ? (bool) $settings['is_q'] : false;
+                    $qw = ($is_q) ? "'" : "";
+                    if (! empty($expression)) $expression .= $logic_operator;
+                    $expression .= $param . ' ' . $operator . ' ' . $qw . $value . $qw;
+                    $logic_operator = ! empty($settings['logic_operator']) ? (string) $settings['logic_operator'] : 'and';
+                }
+            }
+
+            if (! empty($expression)) $this->Filter('(' . $expression . ')', $operation_type);
         }
     }
 
