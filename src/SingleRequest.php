@@ -277,7 +277,7 @@ class SingleRequest implements IRequest
                     $operator = ! empty($settings['operator']) ? (string) $settings['operator'] : 'eq';
                     $is_q = ! empty($settings['is_q']) ? (bool) $settings['is_q'] : false;
                     $qw = ($is_q) ? "'" : "";
-                    if (! empty($expression)) $expression .= $logic_operator;
+                    if (! empty($expression)) $expression .= ' ' . $logic_operator . ' ';
                     $expression .= $param . ' ' . $operator . ' ' . $qw . $value . $qw;
                     $logic_operator = ! empty($settings['logic_operator']) ? (string) $settings['logic_operator'] : 'and';
                 }
