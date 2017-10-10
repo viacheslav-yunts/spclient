@@ -2,7 +2,7 @@
     "name": "sap/Odatalib",
     "description": "Odata clent library",
     "license": "MIT",
-    "keywords": ["odata"],
+    "keywords": ["odata", "odatalib php"],
     "authors": [
         {
             "name": "V.Yuntsevich",
@@ -16,6 +16,11 @@
     "autoload": {
         "psr-4": {
             "Sap\\Odatalib\\": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.12-dev"
         }
     }
 }
