@@ -1,2 +1,9 @@
-/vendor
+# IDE Files
+#-------------------------
+/nbproject/
+.idea/*
+
+# Composer Files
+#-------------------------
 composer.lock
+/vendor/
