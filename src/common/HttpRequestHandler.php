@@ -87,6 +87,8 @@ class HttpRequestHandler
             case "GET" :
                 curl_setopt($curlHandle, CURLOPT_HTTPGET, true);
                 break;
+            case "PATCH" :
+                curl_setopt($curlHandle, CURLOPT_CUSTOMREQUEST, 'PATCH');
             case "POST" :
                 curl_setopt($curlHandle, CURLOPT_POST, true);
                 curl_setopt($curlHandle, CURLOPT_FOLLOWLOCATION, false);
