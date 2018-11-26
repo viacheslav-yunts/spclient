@@ -48,10 +48,16 @@ class Odatalib
         
         return new BatchRequest($method_name, $odata_connection_config, $method_request_type);
     }
-    
-    public function crateBatchSubRequest($method_name, $method_request_type = 'GET')
+
+    /**
+     * @param $methodName
+     * @param array $urlParams
+     * @param string $methodRequestType
+     * @return \Sap\Odatalib\BatchSubRequest
+     */
+    public function crateBatchSubRequest($methodName, Array $urlParams = [], string $methodRequestType = 'GET')
     {
-        return new BatchSubRequest($method_name, $method_request_type);
+        return new BatchSubRequest($methodName, $urlParams, $methodRequestType);
     }
 
     /**

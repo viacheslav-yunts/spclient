@@ -3,15 +3,31 @@ namespace Sap\Odatalib;
 
 
 use Sap\Odatalib\common\OdataConstants;
-use Sap\Odatalib\IRequest;
-use Sap\Odatalib\SingleRequest;
-use Sap\Odatalib\BatchSubRequest;
+//use Sap\Odatalib\IRequest;
+//use Sap\Odatalib\SingleRequest;
+//use Sap\Odatalib\BatchSubRequest;
+
+/**
+ * Class BatchRequest
+ * @package Sap\Odatalib
+ */
 class BatchRequest extends SingleRequest implements IRequest
 {
+    /**
+     * @var string
+     */
     protected $_type = OdataConstants::BATCH;
 
-    public $_requests = array();
+    /**
+     * @var array
+     */
+    public $_requests = [];
 
+    /**
+     * @param \Sap\Odatalib\BatchSubRequest $single_request
+     * @param null $key
+     * @throws \Exception
+     */
     public function add(BatchSubRequest $single_request, $key = null) 
     {
         if ($key == null) {
@@ -25,6 +41,10 @@ class BatchRequest extends SingleRequest implements IRequest
         }
     }
 
+    /**
+     * @param $key
+     * @throws \Exception
+     */
     public function delete($key) 
     {
         if (isset($this->_requests[$key])) {
@@ -34,6 +54,11 @@ class BatchRequest extends SingleRequest implements IRequest
         }
     }
 
+    /**
+     * @param $key
+     * @return mixed
+     * @throws \Exception
+     */
     public function get($key)
     {
         if (isset($this->_requests[$key])) {
@@ -43,10 +68,17 @@ class BatchRequest extends SingleRequest implements IRequest
         }
     }
 
+    /**
+     * @param $key
+     * @return bool
+     */
     public function keyExists($key) {
         return isset($this->_requests[$key]);
     }
-    
+
+    /**
+     * @return string
+     */
     public function constructBody()
     {
         $request_body = '';
@@ -71,7 +103,6 @@ class BatchRequest extends SingleRequest implements IRequest
                 $request_body .= "Accept: application/json \r\n";
                 $request_body .= "\r\n" . $json . "\r\n";
                 $request_body .= "--changeset--\r\n";
-
             }
             $request_body .= "\r\n\r\n";
         }
@@ -80,24 +111,23 @@ class BatchRequest extends SingleRequest implements IRequest
 
         return $request_body;
     }
-    
-    
-    
-    
+
+    /**
+     * @return string
+     */
     public function getRequestType()
     {
         return $this->_type;
     }
+
     /**
-    * function buildQuery()
-    * 
-    * @return string $query
-    */
+     * @return $this
+     */
     public function buildQuery()
     {
 
         return $this;
-        
+        /*
         $httpRequest = $this->_initRequest();
         
         $query = $httpRequest->buildQuery();
@@ -105,10 +135,14 @@ class BatchRequest extends SingleRequest implements IRequest
         //echo "<pre>"; print_r( $query ); echo "</pre>"; die;
         
         return $query;
+        */
     }
 
+    /**
+     * @return $this
+     */
     public function execute()
     {
-        
+        return $this;
     }
 }
