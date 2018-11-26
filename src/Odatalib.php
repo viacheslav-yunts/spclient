@@ -58,11 +58,19 @@ class Odatalib
      */
     public function crateBatchSubRequest($methodName, Array $urlParams = [], string $methodRequestType = 'GET')
     {
-        return new BatchSubRequest(
+        $request = new BatchSubRequest(
             $methodName,
             new BaseSapConfig(ConfigFactory::DEFAULT_SYSTEM, ConfigFactory::DEFAULT_CONNECTION_TYPE, '/'),
             $methodRequestType
         );
+
+        if (!empty($urlParams)) {
+            foreach ($urlParams as $param => $value) {
+                $request->addParam($param, $value);
+            }
+        }
+
+        return $request;
     }
 
     /**
