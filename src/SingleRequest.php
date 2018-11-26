@@ -226,6 +226,7 @@ class SingleRequest implements IRequest
     public function Filter($expression, $operation_type = 'and')
     {
         $this->_systemQueryOptions['$filter'] .= empty($this->_systemQueryOptions['$filter']) ? $expression : ' ' . $operation_type . ' ' . $expression;
+        return $this;
     }
 
     public function addFiltr($param_name , $param_value, $is_q =false, $param_type='eq', $arr_type='and')
@@ -240,6 +241,7 @@ class SingleRequest implements IRequest
             $p_value = ($is_q) ? "'" . trim($param_value) . "'" : trim($param_value);
             $this->Filter($param_name . ' ' . $param_type . ' ' . $p_value, $arr_type);
         }
+        return $this;
     }
 
     /**
@@ -285,6 +287,7 @@ class SingleRequest implements IRequest
 
             if (! empty($expression)) $this->Filter('(' . $expression . ')', $operation_type);
         }
+        return $this;
     }
 
     public function getRequestType()
