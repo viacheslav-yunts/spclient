@@ -1,8 +1,10 @@
 <?php
+
 namespace Sap\Odatalib;
 
 
 use Sap\Odatalib\common\OdataConstants;
+
 //use Sap\Odatalib\IRequest;
 //use Sap\Odatalib\SingleRequest;
 //use Sap\Odatalib\BatchSubRequest;
@@ -24,28 +26,31 @@ class BatchRequest extends SingleRequest implements IRequest
     public $_requests = [];
 
     /**
-     * @param \Sap\Odatalib\BatchSubRequest $single_request
+     * @param \Sap\Odatalib\BatchSubRequest $singleRequest
      * @param null $key
      * @throws \Exception
      */
-    public function add(BatchSubRequest $single_request, $key = null) 
+    public function add(BatchSubRequest $singleRequest, $key = null)
     {
+
         if ($key == null) {
-            $this->_requests[] = $single_request;
+            $this->_requests[] = $singleRequest;
         } else {
             if (isset($this->_requests[$key])) {
                 throw new \Exception("Key $key already in use.");
             } else {
-                $this->_requests[$key] = $single_request;
+                $this->_requests[$key] = $singleRequest;
             }
         }
+
+        return $this;
     }
 
     /**
      * @param $key
      * @throws \Exception
      */
-    public function delete($key) 
+    public function delete($key)
     {
         if (isset($this->_requests[$key])) {
             unset($this->_requests[$key]);
@@ -72,7 +77,8 @@ class BatchRequest extends SingleRequest implements IRequest
      * @param $key
      * @return bool
      */
-    public function keyExists($key) {
+    public function keyExists($key)
+    {
         return isset($this->_requests[$key]);
     }
 
@@ -89,13 +95,13 @@ class BatchRequest extends SingleRequest implements IRequest
             if ($request->getRequestType() == 'POST') {
                 $request_body .= "Content-Type: multipart/mixed; boundary=changeset\r\n";
                 $request_body .= "\r\n--changeset\r\n";
-                
+
             }
             $request_body .= "Content-Type: application/http\r\n";
             $request_body .= "Content-Transfer-Encoding: binary\r\n";
 
             $request_body .= "\r\n" . $request->getRequestType() . " " . $request->getUrl() . " HTTP/1.1\r\n";
-    
+
             if ($request->getRequestType() == 'POST') {
                 $json = json_encode($request->getParams());
                 $request_body .= "Content-Type: application/json; charset=utf-8 \r\n";

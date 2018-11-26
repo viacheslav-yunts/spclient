@@ -16,21 +16,21 @@ class SingleRequest implements IRequest
     // req_type
     private $_request_type = '';
     // параметры урла
-    private $_systemQueryOptions = array(
-                '$expand'       => array(),
-                '$filter'       => '',
-                '$format'       => 'json',
-                '$inlinecount'  => array(),
-                '$orderby'      => array(),
-                '$select'       => array(),
-                '$skip'         => '',
-                '$top'          => '',
-                '$skiptoken'    => ''
-    );
+    protected $_systemQueryOptions = [
+        '$expand' => [],
+        '$filter' => '',
+        '$format' => 'json',
+        '$inlinecount' => [],
+        '$orderby' => [],
+        '$select' => [],
+        '$skip' => '',
+        '$top' => '',
+        '$skiptoken' => ''
+    ];
     // заголовки запроса
-    private $_headers = array();
+    private $_headers = [];
     // запрос
-    private $_body = array();
+    private $_body = [];
     
     public function __construct(string $url, BaseConfig $config, $request_type = 'GET')
     {
@@ -335,17 +335,17 @@ class SingleRequest implements IRequest
     private function _initRequest()
     {
         // запрос в сап
-        $httpRequest = new HttpRequest(  $this->getTransferType(),
-                                             $this->getUrl(),
-                                             false,
-                                             $this->_headers,
-                                             array( 
-                                               'system_options' => $this->_systemQueryOptions, 
-                                               'custom_params'  => $this->_other, 
-                                             ),
-                                             false 
-                                          );
-        return  $httpRequest;   
+        $httpRequest = new HttpRequest($this->getTransferType(),
+            $this->getUrl(),
+            false,
+            $this->_headers,
+            array(
+                'system_options' => $this->_systemQueryOptions,
+                'custom_params' => $this->_other,
+            ),
+            false
+        );
+        return $httpRequest;
     }
 
 }

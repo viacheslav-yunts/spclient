@@ -1,11 +1,13 @@
 <?php
-
 namespace Sap\Odatalib;
 
+use Sap\Odatalib\config\BaseConfig;
 
-//use Sap\Odatalib\IRequest;
-//use Sap\Odatalib\SingleRequest;
-class BatchSubRequest
+/**
+ * Class BatchSubRequest
+ * @package Sap\Odatalib
+ */
+class BatchSubRequest extends SingleRequest implements IRequest
 {
     /**
      * @var null
@@ -13,30 +15,26 @@ class BatchSubRequest
     private $_url = null;
 
     /**
-     * @var null
+     * @var null|BaseConfig
      */
-    private $_req_type = null;
+    private $_config = null;
 
     /**
-     * @var array
+     * @var null
      */
-    private $params = [];
+    private $_request_type = null;
 
     /**
      * BatchSubRequest constructor.
-     * @param $methodName
-     * @param array $urlParams
-     * @param string $methodRequestType
+     * @param string $url
+     * @param BaseConfig $config
+     * @param string $request_type
      */
-    public function __construct($methodName, Array $urlParams = [], string $methodRequestType = 'GET')
+    public function __construct(string $url, BaseConfig $config, $request_type = 'GET')
     {
-        $this->_url = $methodName;
-        $this->_req_type = $methodRequestType;
-        if (!empty($urlParams)) {
-            foreach ($urlParams as $key => $value) {
-                $this->addParam($key, $value);
-            }
-        }
+        $this->_config = $config;
+        $this->setUrl($url);
+        $this->setTrasferType($request_type);
     }
 
     /**
@@ -52,29 +50,7 @@ class BatchSubRequest
      */
     public function getRequestType()
     {
-        return $this->_req_type;
+        return $this->_request_type;
     }
 
-    /**
-     * добавляем переменную в запрос
-     * @param $param_name
-     * @param $param_value
-     * @param bool $wrap_in_quotes
-     */
-    public function addParam($param_name, $param_value, $wrap_in_quotes = false)
-    {
-        if ($wrap_in_quotes) {
-            $param_value = "'" . $param_value . "'";
-        }
-        $this->params[$param_name] = $param_value;
-        //$this->AddQueryOption($param_name, $param_value );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getParams()
-    {
-        return $this->params;
-    }
 }
