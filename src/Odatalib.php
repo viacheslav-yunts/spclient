@@ -57,10 +57,9 @@ class Odatalib
      */
     public function crateBatchSubRequest($methodName, Array $urlParams = [], string $methodRequestType = 'GET')
     {
-        $odata_connection_config = $this->createConnectionConfig(ConfigFactory::DEFAULT_SYSTEM, ConfigFactory::DEFAULT_CONNECTION_TYPE, '/');
         return new BatchSubRequest(
             $methodName,
-            $odata_connection_config,
+            new BaseSapConfig(ConfigFactory::DEFAULT_SYSTEM, ConfigFactory::DEFAULT_CONNECTION_TYPE, '/'),
             $methodRequestType
         );
     }
