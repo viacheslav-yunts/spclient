@@ -10,6 +10,7 @@ use Sap\Odatalib\BatchRequest;
 use Sap\Odatalib\BatchSubRequest;
 use Sap\Odatalib\common\DeliveryBuilder;
 use Sap\Odatalib\common\DeliveryDirector;
+use Sap\Odatalib\config\BaseSapConfig;
 /**
 * 
 */
