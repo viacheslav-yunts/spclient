@@ -10,11 +10,11 @@ class SingleRequest implements IRequest
     protected $_type = OdataConstants::SINGLE;
 
     // вызываемы url    
-    private $_url = null;
+    protected $_url = null;
     // config
-    private $_config = null;
+    protected $_config = null;
     // req_type
-    private $_request_type = '';
+    protected $_request_type = '';
     // параметры урла
     protected $_systemQueryOptions = [
         '$expand' => [],
@@ -46,21 +46,24 @@ class SingleRequest implements IRequest
 
     public function constructUrl()
     {
-        $url ='http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl() . '?';
+        return 'http://' . $this->_config->getServer() . '/sap/opu/odata/sap/' . $this->getUrl() . '?' . $this->getSystemQueryOptionsToString();
+    }
 
+    public function getSystemQueryOptionsToString()
+    {
+        $string = '';
         if ($this->_request_type == 'GET') {
             foreach ($this->_systemQueryOptions as $key => $val) {
                 if (! empty($val)) {
                     if (is_array($val)) {
-                        $url .='&'.$key.'='.strtr ( implode(',',$val), array ("&amp;"=> "%26", "&"=> "%26"));
+                        $string .='&'.$key.'='.strtr ( implode(',',$val), array ("&amp;"=> "%26", "&"=> "%26"));
                     } else {
-                        $url .='&'.$key.'='.strtr ( $val, array ("&amp;"=> "%26", "&"=> "%26"));
+                        $string .='&'.$key.'='.strtr ( $val, array ("&amp;"=> "%26", "&"=> "%26"));
                     }
                 }
             }
         }
-
-        return $url;
+        return $string;
     }
     
     public function constructBody()
