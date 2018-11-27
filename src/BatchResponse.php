@@ -39,7 +39,7 @@ class BatchResponse extends AbstractResponse
                 $parts = array_slice(explode($matches[1], $body), 1);
 
                 foreach ($parts as $part) {
-                    $part_headers = $part_body = '';
+                    $part_body = '';
                     // If this is the last part, break
                     if ($part == "--\r\n") {
                         break;

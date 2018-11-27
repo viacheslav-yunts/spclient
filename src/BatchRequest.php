@@ -57,6 +57,7 @@ class BatchRequest extends SingleRequest implements IRequest
         } else {
             throw new \Exception("Invalid key $key.");
         }
+        return $this;
     }
 
     /**
@@ -103,7 +104,7 @@ class BatchRequest extends SingleRequest implements IRequest
             $request_body .= "\r\n" . $request->getRequestType() . " " . $request->constructUrl() . " HTTP/1.1\r\n";
 
             if ($request->getRequestType() == 'POST') {
-                $json = json_encode($request->getParams());
+                $json = $request->constructBody();
                 $request_body .= "Content-Type: application/json; charset=utf-8 \r\n";
                 $request_body .= "Content-Length: " . strlen($json) . "\r\n";
                 $request_body .= "Accept: application/json \r\n";

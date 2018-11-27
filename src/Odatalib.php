@@ -74,13 +74,12 @@ class Odatalib
     }
 
     /**
-    * создание объекта настройки для подключения odata
-    * 
-    * @param mixed $connection_system
-    * @param mixed $connection_type
-    * @param mixed $config_file_path
-    * @return object 
-    */
+     * создание объекта настройки для подключения odata
+     * @param string $connection_system
+     * @param string $connection_type
+     * @param string $config_file_path
+     * @return null|void
+     */
     public function createConnectionConfig($connection_system = '', $connection_type = '', $config_file_path = '')
     {
         $config_factory = new ConfigFactory();

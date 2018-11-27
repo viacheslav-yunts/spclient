@@ -100,7 +100,6 @@ class ConfigFactory
      * @param string $system
      * @param string $connectionType
      * @param null $pathToConnectionFile
-     *
      * @throws \Exception
      */
     public function create($system = 'sap', $connectionType = 'default', $pathToConnectionFile = null)

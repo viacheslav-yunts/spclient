@@ -37,6 +37,7 @@ class SingleRequest implements IRequest
         $this->_config = $config;
         $this->setUrl($url);
         $this->setTrasferType($request_type);
+        return $this;
     }
 
     public function getConfig()
