@@ -115,6 +115,7 @@ class SingleRequest implements IRequest
     public function AddHeaderOption($header_name, $header_value)
     {
         $this->_headers[$header_name] = $header_value;
+        return $this;
     }
     
     /**
