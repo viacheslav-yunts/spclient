@@ -2,8 +2,6 @@
 namespace Sap\Odatalib;
 
 require_once('common/functions.php');
-//use Sap\Odatalib\AbstractResponse;
-//use Sap\Odatalib\SingleResponse;
 
 /**
  * Class BatchResponse
@@ -16,11 +14,35 @@ class BatchResponse extends AbstractResponse
      * @param $headers
      * @param $body
      */
-    public function __construct($headers, $body)
+    public function __construct($headers, $body, IRequest $request)
     {
-        parent::__construct($headers, $body);
+        parent::__construct($headers, $body, $request);
         $this->_body = $this->_prepBody($body);
         $this->_initMessages();
+    }
+
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function hasSubResponse($key)
+    {
+        return isset($this->_body[$key]);
+    }
+
+    /**
+     * @param $key
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getSubResponse($key)
+    {
+        if (isset($this->_body[$key])) {
+            return $this->_body[$key];
+        } else {
+            throw new \Exception("Invalid key $key.");
+        }
     }
 
     /**
@@ -29,6 +51,7 @@ class BatchResponse extends AbstractResponse
      */
     protected function _prepBody($body)
     {
+        $subRequestsKeys = array_keys($this->_request->_requests);
         $arr_single_responses = [];
 
         if ($content_type = $this->getHeader('content-type')) {
@@ -57,13 +80,36 @@ class BatchResponse extends AbstractResponse
                             }
                         }
                     }
-                    $arr_single_responses[] = new SingleResponse($part_headers, $part_body);
+
+                    $key = array_shift($subRequestsKeys);
+                    $arr_single_responses[$key] = new SingleResponse($part_headers, $part_body, $this->_request->get($key));
                 }
             } else {
-                $arr_single_responses[] = new SingleResponse('', $body);
+                $key = array_shift($subRequestsKeys);
+                $arr_single_responses[] = new SingleResponse('', $body, $this->_request->get($key));
             }
         }
         return $arr_single_responses;
+    }
+
+    /**
+     *
+     * Инициализация сообщений
+     *
+     */
+    protected function _initMessages()
+    {
+
+        parent::_initMessages();
+
+        if (is_array($this->_body)) {
+            foreach ($this->_body as $key => $response) {
+                if ($response instanceof AbstractResponse) {
+                    $this->_messages = array_merge($this->_messages, $response->getMessages());
+                }
+            }
+        }
+
     }
 
 }

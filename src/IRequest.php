@@ -15,4 +15,8 @@ interface IRequest
 
     // выполнение запроса
     public function execute();
+
+    // получение конфигов
+    public function getConfig();
+
 }

@@ -1,29 +1,43 @@
 <?php 
 namespace Sap\Odatalib\common;
 
-
 use Sap\Odatalib\common\OdataConstants;
 use Sap\Odatalib\SingleResponse;
 use Sap\Odatalib\MultiResponse;
 use Sap\Odatalib\BatchResponse;
+use Sap\Odatalib\IRequest;
+
+/**
+ * Class HttpResponseHandler
+ * @package Sap\Odatalib\common
+ */
 class HttpResponseHandler
 {
-    public static function parse($request_type, $header, $body)
+
+
+    /**
+     * @param $request_type
+     * @param $header
+     * @param $body
+     * @param IRequest $request
+     * @return BatchResponse|MultiResponse|SingleResponse
+     */
+    public static function parse($request_type, $header, $body, IRequest $request)
     {
 
         switch ($request_type) {
 
             case OdataConstants::MULTIPLE : 
-                $resp = new MultiResponse($header, $body);
+                $resp = new MultiResponse($header, $body, $request);
                 break;
 
             case OdataConstants::BATCH : 
-                $resp = new BatchResponse($header, $body);
+                $resp = new BatchResponse($header, $body, $request);
                 break;
 
             case OdataConstants::SINGLE : 
             default :
-                $resp = new SingleResponse($header, $body);
+                $resp = new SingleResponse($header, $body, $request);
                 break;
         }
 

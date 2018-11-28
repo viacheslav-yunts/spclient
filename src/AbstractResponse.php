@@ -10,10 +10,12 @@ abstract class AbstractResponse
     protected $_messages  = array();
     protected $_headers = array();
     protected $_body = '';
+    protected $_request;
 
-    public function __construct($headers, $body)
+    public function __construct($headers, $body, IRequest $request)
     {
         $this->_headers = array();
+        $this->_request = $request;
 
         // Parse the headers list
         $headers = explode("\r\n", $headers);

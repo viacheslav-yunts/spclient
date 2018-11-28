@@ -3,26 +3,35 @@ namespace Sap\Odatalib\common;
 
 
 use Sap\Odatalib\IRequest;
-use Sap\Odatalib\common\OdataConstants;
-use Sap\Odatalib\common\HttpRequestHandler;
+//use Sap\Odatalib\common\OdataConstants;
+//use Sap\Odatalib\common\HttpRequestHandler;
+
+/**
+ * Class DeliveryBuilder
+ * @package Sap\Odatalib\common
+ */
 class DeliveryBuilder
 {
     private   $_http = null;
     protected $_request = null;
 
+    /**
+     * DeliveryBuilder constructor.
+     * @param IRequest $request
+     */
     public function __construct(IRequest $request)
     {
-        $this -> _request = $request;
-        switch ($this -> _request->getRequestType()) {
+        $this->_request = $request;
+        switch ($this->_request->getRequestType()) {
             case OdataConstants::MULTIPLE :
                 // не работает
-                $this -> _http = new HttpRequestHandler($this -> _request -> getConfig());
+                $this->_http = new HttpRequestHandler($this->_request);
                 break;
             case OdataConstants::SINGLE :
             case OdataConstants::BATCH :
             default :
-               $this -> _http = new HttpRequestHandler($this -> _request->getRequestType(), $this -> _request -> getConfig());
-               break;
+                $this->_http = new HttpRequestHandler($this->_request);
+                break;
         }
     }
 

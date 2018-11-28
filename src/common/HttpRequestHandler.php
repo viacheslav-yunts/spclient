@@ -2,12 +2,20 @@
 namespace Sap\Odatalib\common;
 
 require_once('functions.php');
-use Sap\Odatalib\common\HttpResponseHandler;
-use Sap\Odatalib\config\BaseConfig;
+
+//use Sap\Odatalib\common\HttpResponseHandler;
+//use Sap\Odatalib\config\BaseConfig;
+use Sap\Odatalib\IRequest;
+
+/**
+ * Class HttpRequestHandler
+ * @package Sap\Odatalib\common
+ */
 class HttpRequestHandler
 {
     use UrlEncodeTrait;
 
+    private $_request;
     private $_request_type;
     private $_config;
     private $_url = '';
@@ -16,37 +24,60 @@ class HttpRequestHandler
     private $_headers = false;
     private $_body = false;
 
-    public function __construct($request_type, BaseConfig $connection_config)
+    /**
+     * HttpRequestHandler constructor.
+     * @param IRequest $request
+     */
+    public function __construct(IRequest $request)
     {
-        $this->_request_type = $request_type;
-        $this->_config = $connection_config;
+        $this->_request = $request;
+        $this->_request_type = $request->getRequestType();
+        $this->_config = $request->getConfig();
     }
 
+    /**
+     * @param $url
+     */
     public function setUrl($url)
     {
         $this->_url = $url;
     }
 
+    /**
+     * @param $request_type
+     */
     public function setRequestType($request_type)
     {
         $this->_http_request_type = $request_type;
     }
 
+    /**
+     * @param $status
+     */
     public function setProxy($status)
     {
         $this->_proxy = (bool) $status;
     }
 
+    /**
+     * @param $arr_headers
+     */
     public function setHeader($arr_headers)
     {
         $this->_headers = $arr_headers;
     }
 
+    /**
+     * @param $body
+     */
     public function setBody($body)
     {
         $this->_body = $body;
     }
 
+    /**
+     * @return array
+     */
     public function test()
     {
         return array(
@@ -57,6 +88,9 @@ class HttpRequestHandler
         );
     }
 
+    /**
+     * @return \Sap\Odatalib\BatchResponse|\Sap\Odatalib\MultiResponse|\Sap\Odatalib\SingleResponse
+     */
     public function execute()
     {
 
@@ -101,12 +135,12 @@ class HttpRequestHandler
 
         if (! $httpResponse = curl_exec($curlHandle)) {
 
-            $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 403 Forbidden', curl_error($curlHandle), '');
+            $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 403 Forbidden', curl_error($curlHandle), '', $this->_request);
 
         } else {
 
             $header_size = curl_getinfo($curlHandle, CURLINFO_HEADER_SIZE);
-            $response = HttpResponseHandler::parse($this->_request_type, substr($httpResponse, 0, $header_size), substr($httpResponse, $header_size));
+            $response = HttpResponseHandler::parse($this->_request_type, substr($httpResponse, 0, $header_size), substr($httpResponse, $header_size), $this->_request);
 
         }
 

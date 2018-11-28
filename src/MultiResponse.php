@@ -1,6 +1,7 @@
 <?php
 namespace Sap\Odatalib;
 
+use Sap\Odatalib\IRequest;
 
 class MultiResponse
 {
@@ -9,7 +10,7 @@ class MultiResponse
     private $_header = '';
     private $_body = '';
 
-    public function __construct($header, $body)
+    public function __construct($header, $body, IRequest $request)
     {
         $this->_header = $header;
         $this->_body = $body;
