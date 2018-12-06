@@ -136,7 +136,7 @@ class HttpRequestHandler
         if (! $httpResponse = curl_exec($curlHandle)) {
 
             $curlError = curl_error($curlHandle);
-            $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 403 Forbidden' . (is_string($curlError) ? $curlError : ''), $curlError, $this->_request);
+            $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 403 ' . (is_string($curlError) ? $curlError : 'Forbidden'), $curlError, $this->_request);
 
         } else {
 
