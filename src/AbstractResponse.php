@@ -162,6 +162,7 @@ abstract class AbstractResponse
                 break;
 
             case 'info':
+            case 'success':
                 $type = 'S';
                 break;
 
