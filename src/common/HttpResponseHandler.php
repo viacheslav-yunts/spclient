@@ -1,7 +1,7 @@
 <?php 
 namespace Sap\Odatalib\common;
 
-use Sap\Odatalib\common\OdataConstants;
+//use Sap\Odatalib\common\OdataConstants;
 use Sap\Odatalib\SingleResponse;
 use Sap\Odatalib\MultiResponse;
 use Sap\Odatalib\BatchResponse;

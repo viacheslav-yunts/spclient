@@ -1,12 +1,20 @@
 <?php
 namespace Sap\Odatalib\parser;
 
-use Sap\Odatalib\parser\AbstractParser;
+//use Sap\Odatalib\parser\AbstractParser;
+
+/**
+ * Class XmlParser
+ * @package Sap\Odatalib\parser
+ */
 class XmlParser extends AbstractParser
 {
-    public static function parse($data)
+    /**
+     * @param $data
+     * @return \SimpleXMLElement
+     */
+    public function parse($data)
     {
         return simplexml_load_string(trim($data));
     }
 }
-?>
