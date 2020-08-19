@@ -32,6 +32,11 @@ abstract class BaseConfig
     /**
      * @var string
      */
+    protected $service_prefix = '';
+
+    /**
+     * @var string
+     */
     protected $server;
 
     /**
@@ -391,6 +396,24 @@ abstract class BaseConfig
     public function setDefault($default)
     {
         $this->default = $default;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServicePrefix(): string
+    {
+        return $this->service_prefix;
+    }
+
+    /**
+     * @param string $prefix
+     * @return $this
+     */
+    public function setServicePrefix(string $prefix)
+    {
+        $this->service_prefix = $prefix;
         return $this;
     }
 

@@ -16,6 +16,7 @@ class BaseEwmConfig extends BaseConfig
         $this->setSystem($system);
         $this->setConnectionType($connectionType);
         $this->setConfigurationFile($configurationFile);
+        $this->setServicePrefix('/sap/opu/odata/sap/');
     }
 
     /**

@@ -16,6 +16,7 @@ class BaseHanaConfig extends BaseConfig
         $this->setSystem($system);
         $this->setConnectionType($connectionType);
         $this->setConfigurationFile($configurationFile);
+        $this->setServicePrefix('/zat/');
     }
 
     /**
