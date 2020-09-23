@@ -8,7 +8,7 @@ use Sap\Odatalib\config\BaseCrmConfig;
 
 /**
  * Класс - фабрика для генерации и получения объекта, содержащего информацию из конфигурационных массивов
- * 
+ *
  * Пример вызова:
  *      $connection = new ConfigFactory('development');
  *      $config = $connection->create('sap', 'default');
@@ -21,7 +21,7 @@ use Sap\Odatalib\config\BaseCrmConfig;
 class ConfigFactory
 {
     /* Доступные расширения конфигурационных файлов */
-    const AVAILABLE_FILE_EXTENSIONS = ['yml', 'php'];
+    const AVAILABLE_FILE_EXTENSIONS = ['yml', 'php', 'yaml'];
 
     /* Дефолтное значение системы (sap, crm, etc) */
     const DEFAULT_SYSTEM = 'sap';
@@ -112,27 +112,28 @@ class ConfigFactory
 
             $configClassName = $this->getFullClassName();
             if (class_exists($configClassName)) {
-                $configObject = new $configClassName($this->getSystem(), $this->getConnectionType(), $this->getConfigurationFile());
+                $configObject = new $configClassName($this->getSystem(), $this->getConnectionType(),
+                    $this->getConfigurationFile());
 
                 $pathInfo = pathinfo($this->getConfigurationFile());
                 $fileExtension = !empty($pathInfo['extension']) ? $pathInfo['extension'] : false;
                 if ($fileExtension) {
 
                     if (in_array($fileExtension, self::AVAILABLE_FILE_EXTENSIONS)) {
-                        
+
                         $connectionsSettings = [];
                         if ($fileExtension == 'php') {
-                            include ($this->getConfigurationFile());
-                        } elseif ($fileExtension == 'yml') {
+                            include($this->getConfigurationFile());
+                        } elseif ($fileExtension == 'yml' || $fileExtension == 'yaml') {
                             $connectionsSettings = yaml_parse_file($pathToConnectionFile);
                         }
 
                         if (is_array($connectionsSettings) && !empty($connectionsSettings)) {
-                            return  $this->getConfigFromFile($connectionsSettings, $configObject);
+                            return $this->getConfigFromFile($connectionsSettings, $configObject);
                         } else {
                             throw new \Exception("Ошибка парсинга $fileExtension файла");
                         }
-                        
+
                     } else {
                         throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
                     }
@@ -163,7 +164,7 @@ class ConfigFactory
      */
     protected function getFullClassName()
     {
-        return __NAMESPACE__ . '\\config\\'  . $this->getConfigClassName();
+        return __NAMESPACE__ . '\\config\\' . $this->getConfigClassName();
     }
 
     /**
