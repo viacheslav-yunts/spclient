@@ -7,15 +7,36 @@ use Sap\Odatalib\IRequest;
 use Sap\Odatalib\config\BaseConfig;
 class SingleRequest implements IRequest
 {
+    /**
+     * @var string
+     */
     protected $_type = OdataConstants::SINGLE;
 
-    // вызываемы url    
+    /**
+     * вызываемы url
+     * @var null
+     */
     protected $_url = null;
-    // config
+
+    /**
+     * @var BaseConfig|null
+     */
     protected $_config = null;
-    // req_type
+
+    /**
+     * @var string
+     */
     protected $_request_type = '';
-    // параметры урла
+
+    /**
+     * @var bool
+     */
+    protected $version = false;
+
+    /**
+     * параметры урла
+     * @var array
+     */
     protected $_systemQueryOptions = [
         '$expand' => [],
         '$filter' => '',
@@ -27,29 +48,53 @@ class SingleRequest implements IRequest
         '$top' => '',
         '$skiptoken' => ''
     ];
-    // заголовки запроса
+
+    /**
+     * заголовки запроса
+     * @var array
+     */
     private $_headers = [];
-    // запрос
+
+    /**
+     * @var array
+     */
     private $_body = [];
-    
-    public function __construct(string $url, BaseConfig $config, $request_type = 'GET')
+
+    /**
+     * SingleRequest constructor.
+     * @param string $url
+     * @param BaseConfig $config
+     * @param string $request_type
+     * @param bool|string $service_version
+     */
+    public function __construct(string $url, BaseConfig $config, $request_type = 'GET', $service_version = false)
     {
         $this->_config = $config;
         $this->setUrl($url);
         $this->setTrasferType($request_type);
+        $this->setVersion($service_version);
         return $this;
     }
 
+    /**
+     * @return BaseConfig|null
+     */
     public function getConfig()
     {
         return $this->_config; 
     }
 
+    /**
+     * @return string
+     */
     public function constructUrl()
     {
-        return 'http://' . $this->_config->getServer() . $this->_config->getServicePrefix() . $this->getUrl() . '?' . $this->getSystemQueryOptionsToString();
+        return 'http://' . $this->_config->getServer() . $this->_config->getServicePrefix() . $this->getUrl() . $this->drawVersion() . '?' . $this->getSystemQueryOptionsToString();
     }
 
+    /**
+     * @return string
+     */
     public function getSystemQueryOptionsToString()
     {
         $string = '';
@@ -66,7 +111,10 @@ class SingleRequest implements IRequest
         }
         return $string;
     }
-    
+
+    /**
+     * @return false|string
+     */
     public function constructBody()
     {
         return json_encode($this->_body);
@@ -107,6 +155,30 @@ class SingleRequest implements IRequest
     public function getTransferType()
     {
         return $this->_request_type;
+    }
+
+    /**
+    * @param mixed $version
+    */
+    public function setVersion($version = false)
+    {
+        $this->version = $version;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @return string
+     */
+    public function drawVersion()
+    {
+        return empty($this->version) ? '' : ';v=' . $this->version;
     }
 
     /**
@@ -152,7 +224,13 @@ class SingleRequest implements IRequest
         }
     }
 
-    // добавляем переменную в запрос
+    /**
+     * добавляем переменную в запрос
+     *
+     * @param $param_name
+     * @param $param_value
+     * @param bool $wrap_in_quotes
+     */
     public function addParam($param_name, $param_value, $wrap_in_quotes =false )
     {
         if ($wrap_in_quotes) $param_value = "'".$param_value."'"; 
@@ -169,6 +247,7 @@ class SingleRequest implements IRequest
     {
         return $this->AddQueryOption('$orderby', $expression);
     }
+
     /**
     * $top=n     
     * 
