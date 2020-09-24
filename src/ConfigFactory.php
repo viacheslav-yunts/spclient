@@ -44,9 +44,9 @@ class ConfigFactory
     protected $connectionType;
 
     /**
-     * @var string
+     * @var string|array
      */
-    protected $configurationFile;
+    protected $configurationResource = [];
 
     /**
      * @return string
@@ -81,74 +81,85 @@ class ConfigFactory
     }
 
     /**
-     * @return string
+     * @return string|array
      */
-    public function getConfigurationFile()
+    public function getConfigurationResource()
     {
-        return $this->configurationFile;
+        return $this->configurationResource;
     }
 
     /**
-     * @param $configurationFile
+     * @param string|array $configurationFile
      */
-    public function setConfigurationFile($configurationFile)
+    public function setConfigurationResource($resource): void
     {
-        $this->configurationFile = $configurationFile;
+        if (is_array($resource)) {
+            die('array here');
+        } else {
+
+            if (file_exists($resource)) {
+
+                $configClassName = $this->getFullClassName();
+
+                if (class_exists($configClassName)) {
+
+                    $configObject = new $configClassName(
+                        $this->getSystem(),
+                        $this->getConnectionType(),
+                        $resource
+                    );
+
+                    $pathInfo = pathinfo($resource);
+                    $fileExtension = !empty($pathInfo['extension']) ? $pathInfo['extension'] : false;
+                    if ($fileExtension) {
+
+                        if (in_array($fileExtension, self::AVAILABLE_FILE_EXTENSIONS)) {
+
+                            $connectionsSettings = [];
+                            if ($fileExtension == 'php') {
+                                include($resource);
+                            } elseif ($fileExtension == 'yml' || $fileExtension == 'yaml') {
+                                $connectionsSettings = yaml_parse_file($resource);
+                            }
+
+                            if (is_array($connectionsSettings) && !empty($connectionsSettings)) {
+                                return $this->getConfigFromFile($connectionsSettings, $configObject);
+                            } else {
+                                throw new \Exception("Ошибка парсинга $fileExtension файла");
+                            }
+
+                        } else {
+                            throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
+                        }
+
+                    } else {
+                        throw new \Exception("Не установленно расширение конфигурационного файла");
+                    }
+
+                } else {
+                    throw new \Exception("Класс $configClassName (config object) не найден");
+                }
+
+            } else {
+                throw new \Exception("Не найден конфигурационный файл");
+            }
+
+        }
+
+        $this->configurationResource = $resource;
     }
 
     /**
      * @param string $system
      * @param string $connectionType
-     * @param null $pathToConnectionFile
+     * @param string|array $connectionsSettingsResource
      * @throws \Exception
      */
-    public function create($system = 'sap', $connectionType = 'default', $pathToConnectionFile = null)
+    public function create($system = 'sap', $connectionType = 'default', $connectionsSettingsResource = [])
     {
         $this->setSystem($system);
         $this->setConnectionType($connectionType);
-        $this->setConfigurationFile($pathToConnectionFile);
-
-        if (file_exists($this->getConfigurationFile())) {
-
-            $configClassName = $this->getFullClassName();
-            if (class_exists($configClassName)) {
-                $configObject = new $configClassName($this->getSystem(), $this->getConnectionType(),
-                    $this->getConfigurationFile());
-
-                $pathInfo = pathinfo($this->getConfigurationFile());
-                $fileExtension = !empty($pathInfo['extension']) ? $pathInfo['extension'] : false;
-                if ($fileExtension) {
-
-                    if (in_array($fileExtension, self::AVAILABLE_FILE_EXTENSIONS)) {
-
-                        $connectionsSettings = [];
-                        if ($fileExtension == 'php') {
-                            include($this->getConfigurationFile());
-                        } elseif ($fileExtension == 'yml' || $fileExtension == 'yaml') {
-                            $connectionsSettings = yaml_parse_file($pathToConnectionFile);
-                        }
-
-                        if (is_array($connectionsSettings) && !empty($connectionsSettings)) {
-                            return $this->getConfigFromFile($connectionsSettings, $configObject);
-                        } else {
-                            throw new \Exception("Ошибка парсинга $fileExtension файла");
-                        }
-
-                    } else {
-                        throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
-                    }
-
-                } else {
-                    throw new \Exception("Не установленно расширение конфигурационного файла");
-                }
-
-            } else {
-                throw new \Exception("Класс $configClassName (config object) не найден");
-            }
-
-        } else {
-            throw new \Exception("Не найден конфигурационный файл");
-        }
+        $this->setConfigurationResource($connectionsSettingsResource);
     }
 
     /**

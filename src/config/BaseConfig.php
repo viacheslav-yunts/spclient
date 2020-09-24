@@ -132,20 +132,20 @@ abstract class BaseConfig
     }
 
     /**
-     * @return string
+     * @return string|array
      */
-    public function getConfigurationFile()
+    public function getConfigurationResource()
     {
-        return $this->configurationFile;
+        return $this->configurationResource;
     }
 
     /**
-     * @param $configurationFile
+     * @param string|array $resource
      * @return $this
      */
-    public function setConfigurationFile($configurationFile)
+    public function setConfigurationResource($resource)
     {
-        $this->configurationFile = $configurationFile;
+        $this->configurationFile = $resource;
         return $this;
     }
 
