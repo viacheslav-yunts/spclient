@@ -42,12 +42,14 @@ class Odatalib
         $method_request_type = 'GET',
         $conn_system = ConfigFactory::DEFAULT_SYSTEM,
         $conn_type = ConfigFactory::DEFAULT_CONNECTION_TYPE,
-        $conn_resource = []
+        $conn_resource = [],
+        $method_version = false
     ) {
         return new SingleRequest(
             $method_name,
             $this->createConnectionConfig($conn_system, $conn_type, $conn_resource),
-            $method_request_type
+            $method_request_type,
+            $method_version
         );
     }
 
