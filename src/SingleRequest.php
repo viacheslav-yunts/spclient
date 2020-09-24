@@ -3,8 +3,13 @@ namespace Sap\Odatalib;
 
 
 use Sap\Odatalib\common\OdataConstants;
-use Sap\Odatalib\IRequest;
 use Sap\Odatalib\config\BaseConfig;
+
+
+/**
+ * Class SingleRequest
+ * @package Sap\Odatalib
+ */
 class SingleRequest implements IRequest
 {
     /**
@@ -81,7 +86,7 @@ class SingleRequest implements IRequest
      */
     public function getConfig()
     {
-        return $this->_config; 
+        return $this->_config;
     }
 
     /**
@@ -89,7 +94,7 @@ class SingleRequest implements IRequest
      */
     public function constructUrl()
     {
-        return 'http://' . $this->_config->getServer() . $this->_config->getServicePrefix() . $this->getUrl() . $this->drawVersion() . '?' . $this->getSystemQueryOptionsToString();
+        return 'http://' . $this->_config->getServer() . $this->_config->getServicePrefix() . $this->drawUrl() . '?' . $this->getSystemQueryOptionsToString();
     }
 
     /**
@@ -121,45 +126,58 @@ class SingleRequest implements IRequest
     }
 
     /**
-    * function setUrl
-    *
-    * @param string $new_url
-    */
+     * function setUrl
+     *
+     * @param string $new_url
+     */
     public function setUrl($new_url)
     {
         $this->_url = trim($new_url);
     }
-    
+
     /**
-    * function getUrl
-    * 
-    * @return string $url
-    * 
-    */
+     * function getUrl
+     *
+     * @return string $url
+     *
+     */
     public function getUrl()
     {
         return $this->_url;
     }
 
+    public function drawUrl()
+    {
+        $url = $this->getUrl();
+
+        if ($version = $this->drawVersion()) {
+            $urlParts = explode('/', $url);
+            $urlParts[0] .= $version;
+            $url = implode('/', $urlParts);
+        }
+
+        return $url;
+    }
+
     /**
-    * @param mixed $type
-    */
+     * @param mixed $type
+     */
     public function setTrasferType($type)
     {
         $this->_request_type = strtoupper(trim($type));
     }
-    
+
     /**
-    * @return string $_request_type
-    */
+     * @return string $_request_type
+     */
     public function getTransferType()
     {
         return $this->_request_type;
     }
 
     /**
-    * @param mixed $version
-    */
+     * @param mixed $version
+     */
     public function setVersion($version = false)
     {
         $this->version = $version;
@@ -182,31 +200,31 @@ class SingleRequest implements IRequest
     }
 
     /**
-    * @param mixed $header_name
-    * @param mixed $header_value
-    */
+     * @param mixed $header_name
+     * @param mixed $header_value
+     */
     public function AddHeaderOption($header_name, $header_value)
     {
         $this->_headers[$header_name] = $header_value;
         return $this;
     }
-    
+
     /**
-    * @return mixed $_headers
-    */
+     * @return mixed $_headers
+     */
     public function getHeaderOption()
     {
         return $this->_headers;
     }
 
     /**
-    * To add a query option.
-    *
-    * @param string $option The string value that contains the name of the
-    *                 query string option to add
-    * @param string $value The string that contains the value of the query
-    *                 string option
-    */
+     * To add a query option.
+     *
+     * @param string $option The string value that contains the name of the
+     *                 query string option to add
+     * @param string $value The string that contains the value of the query
+     *                 string option
+     */
     public function AddQueryOption($option, $value)
     {
         $option = trim($option);
@@ -233,80 +251,80 @@ class SingleRequest implements IRequest
      */
     public function addParam($param_name, $param_value, $wrap_in_quotes =false )
     {
-        if ($wrap_in_quotes) $param_value = "'".$param_value."'"; 
+        if ($wrap_in_quotes) $param_value = "'".$param_value."'";
         $this->AddQueryOption($param_name, $param_value );
     }
 
     /**
-        * $orderby=<выражение>     
-        * Упорядочивает результаты по набору свойств сущности
-        * 
-        * @param mixed $expression
-        */
+     * $orderby=<выражение>
+     * Упорядочивает результаты по набору свойств сущности
+     *
+     * @param mixed $expression
+     */
     public function OrderBy($expression)
     {
         return $this->AddQueryOption('$orderby', $expression);
     }
 
     /**
-    * $top=n     
-    * 
-    * Ограничивает запрос первыми n сущностями
-    * 
-    * @param mixed $expression
-    */
+     * $top=n
+     *
+     * Ограничивает запрос первыми n сущностями
+     *
+     * @param mixed $expression
+     */
     public function Top($expression)
     {
         return $this->AddQueryOption('$top', (int) $expression);
     }
-        
+
     /**
-    * $skip=n     
-    * Пропускает первые n сущностей в наборе
-    * 
-    * @param mixed $expression
-    */
+     * $skip=n
+     * Пропускает первые n сущностей в наборе
+     *
+     * @param mixed $expression
+     */
     public function Skip($expression = 0)
     {
         return $this->AddQueryOption('$skip', (int) $expression);
     }
 
     /**
-    * $inlinecount=allpages     
-    * Включает счетчик всех сущностей из набора в результат
-    */
+     * $inlinecount=allpages
+     * Включает счетчик всех сущностей из набора в результат
+     */
     public function Inlinecount($expression = 'allpages')
     {
         return $this->AddQueryOption('$inlinecount', $expression);
-    } 
+    }
 
     /**
-    * $select=<выражение>     
-    * Указывает возвращаемое подмножество свойств сущности
-    */
+     * $select=<выражение>
+     * Указывает возвращаемое подмножество свойств сущности
+     */
     public function Select($expression)
     {
         return $this->AddQueryOption('$select', $expression);
     }
 
     /**
-    * $format     
-    * Указывает формат возвращаемого канала (ATOM или JSON). 
-    * Этот параметр не поддерживается в WCF Data Services
-    */
+     * $format
+     * Указывает формат возвращаемого канала (ATOM или JSON).
+     * Этот параметр не поддерживается в WCF Data Services
+     */
     public function Format($expression)
     {
         return $this->AddQueryOption('$format', $expression);
     }
 
     /**
-    * $filter=<выражение>     
-    * Выражение позволяет ограничивать результаты, возвращаемые запросом 
-    * (пример: $filter=Status eq ‘Available’ ограничивает результаты сущностями, 
-    * у которых свойство Status имеет значение «Available»).
-    * 
-    * устанавливает опцию полностью, стирает уже заполлненный до этого фильтр
-    */
+     * $filter=<выражение>
+     * Выражение позволяет ограничивать результаты, возвращаемые запросом
+     * (пример: $filter=Status eq ‘Available’ ограничивает результаты сущностями,
+     * у которых свойство Status имеет значение «Available»).
+     *
+     * устанавливает опцию полностью, стирает уже заполлненный до этого фильтр
+     */
     public function Filter($expression, $operation_type = 'and')
     {
         $this->_systemQueryOptions['$filter'] .= empty($this->_systemQueryOptions['$filter']) ? $expression : ' ' . $operation_type . ' ' . $expression;
@@ -320,7 +338,7 @@ class SingleRequest implements IRequest
             $p_value = ( count( $param_value ) == 1 )?'':'(';
             $p_value .= $param_name.' '.$param_type.' '.$qw.implode("$qw $arr_type $param_name $param_type $qw", $param_value).$qw;
             $p_value .= ( count( $param_value ) == 1 )?'':')';
-            $this->Filter( $p_value ); 
+            $this->Filter( $p_value );
         } else {
             $p_value = ($is_q) ? "'" . trim($param_value) . "'" : trim($param_value);
             $this->Filter($param_name . ' ' . $param_type . ' ' . $p_value, $arr_type);
@@ -329,26 +347,26 @@ class SingleRequest implements IRequest
     }
 
     /**
-    * 
-    * @method addFiltrGroup - добавление группы параметров в фильтр
-    * @example $odata->addFiltrGroup($param_settings, $operation_type);
-    * 
-    * @param array $param_settings - настройки параметров группы
-    * <code>
-    * <?php
-    * $param_settings = [
-    *     [
-    *         'param' => 'VKORG',         // наименование параметра
-    *         'value' => '2000',          // значение параметра
-    *         'operator' => 'eq',         // оператор сравнения параметра (по умолчания равен "eq")
-    *         'is_q' => false,            // признак обрамления значения в ковычки (по умолчания равен "false")
-    *         'logic_operator' => 'and',  // логический оператов связывания списка параметров между собой (по умолчания равен "and")
-    *     ],
-    * ];
-    * ?>
-    * </code>
-    * @param string $operation_type - оператор для добавления группы в общий фильтр (по умолчания равен "and")
-    */
+     *
+     * @method addFiltrGroup - добавление группы параметров в фильтр
+     * @example $odata->addFiltrGroup($param_settings, $operation_type);
+     *
+     * @param array $param_settings - настройки параметров группы
+     * <code>
+     * <?php
+     * $param_settings = [
+     *     [
+     *         'param' => 'VKORG',         // наименование параметра
+     *         'value' => '2000',          // значение параметра
+     *         'operator' => 'eq',         // оператор сравнения параметра (по умолчания равен "eq")
+     *         'is_q' => false,            // признак обрамления значения в ковычки (по умолчания равен "false")
+     *         'logic_operator' => 'and',  // логический оператов связывания списка параметров между собой (по умолчания равен "and")
+     *     ],
+     * ];
+     * ?>
+     * </code>
+     * @param string $operation_type - оператор для добавления группы в общий фильтр (по умолчания равен "and")
+     */
     public function addFiltrGroup($param_settings, $operation_type = 'and')
     {
         if (is_array($param_settings) && ! empty($param_settings)) {
@@ -379,10 +397,10 @@ class SingleRequest implements IRequest
         return $this->_type;
     }
     /**
-    * function buildQuery()
-    * 
-    * @return string $query
-    */
+     * function buildQuery()
+     *
+     * @return string $query
+     */
     public function buildQuery()
     {
         return true;
@@ -392,30 +410,30 @@ class SingleRequest implements IRequest
     public function execute()
     {
         try{
-            
+
             // init
             $httpRequest = $this->_initRequest();
-            
-            // результат работы запроса                                         
+
+            // результат работы запроса
             $response = $httpRequest->GetResponse();
             //echo "<pre>"; print_r( $response ); echo "</pre>"; die('end');
-            
+
             return new ODATA_RESPONSE($response);
-            
+
         }catch(InvalidOperation  $e ){
-            
+
             $response = new ODATA_RESPONSE(false);
-            $response->setError( true ); 
-            
+            $response->setError( true );
+
             $messages = (object) array(
-                'code'  => 'DUMP',   
-                'message'  => $e->getMessage(),   
-                'severity'  => 'warning',   
+                'code'  => 'DUMP',
+                'message'  => $e->getMessage(),
+                'severity'  => 'warning',
             );
             $response->setMessages( $messages );
 
         }
-        
+
         return $response;
     }
 
