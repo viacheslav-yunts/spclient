@@ -91,53 +91,34 @@ class ConfigFactory
     /**
      * @param string|array $configurationFile
      */
-    public function setConfigurationResource($resource): void
+    public function setConfigurationResource($resource)
     {
+        $connectionsSettings = [];
+
         if (is_array($resource)) {
-            die('array here');
+            $connectionsSettings = $resource;
         } else {
 
             if (file_exists($resource)) {
 
-                $configClassName = $this->getFullClassName();
+                $pathInfo = pathinfo($resource);
+                $fileExtension = !empty($pathInfo['extension']) ? $pathInfo['extension'] : false;
+                if ($fileExtension) {
 
-                if (class_exists($configClassName)) {
+                    if (in_array($fileExtension, self::AVAILABLE_FILE_EXTENSIONS)) {
 
-                    $configObject = new $configClassName(
-                        $this->getSystem(),
-                        $this->getConnectionType(),
-                        $resource
-                    );
-
-                    $pathInfo = pathinfo($resource);
-                    $fileExtension = !empty($pathInfo['extension']) ? $pathInfo['extension'] : false;
-                    if ($fileExtension) {
-
-                        if (in_array($fileExtension, self::AVAILABLE_FILE_EXTENSIONS)) {
-
-                            $connectionsSettings = [];
-                            if ($fileExtension == 'php') {
-                                include($resource);
-                            } elseif ($fileExtension == 'yml' || $fileExtension == 'yaml') {
-                                $connectionsSettings = yaml_parse_file($resource);
-                            }
-
-                            if (is_array($connectionsSettings) && !empty($connectionsSettings)) {
-                                return $this->getConfigFromFile($connectionsSettings, $configObject);
-                            } else {
-                                throw new \Exception("Ошибка парсинга $fileExtension файла");
-                            }
-
-                        } else {
-                            throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
+                        if ($fileExtension == 'php') {
+                            include($resource);
+                        } elseif ($fileExtension == 'yml' || $fileExtension == 'yaml') {
+                            $connectionsSettings = yaml_parse_file($resource);
                         }
 
                     } else {
-                        throw new \Exception("Не установленно расширение конфигурационного файла");
+                        throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
                     }
 
                 } else {
-                    throw new \Exception("Класс $configClassName (config object) не найден");
+                    throw new \Exception("Не установленно расширение конфигурационного файла");
                 }
 
             } else {
@@ -146,7 +127,7 @@ class ConfigFactory
 
         }
 
-        $this->configurationResource = $resource;
+        $this->configurationResource = $connectionsSettings;
     }
 
     /**
@@ -160,6 +141,21 @@ class ConfigFactory
         $this->setSystem($system);
         $this->setConnectionType($connectionType);
         $this->setConfigurationResource($connectionsSettingsResource);
+
+        $configClassName = $this->getFullClassName();
+
+        if (class_exists($configClassName)) {
+
+            $configObject = new $configClassName(
+                $this->getSystem(),
+                $this->getConnectionType()
+            );
+
+            return $this->getConfigFromFile($this->getConfigurationResource(), $configObject);
+
+        } else {
+            throw new \Exception("Класс $configClassName (config object) не найден");
+        }
     }
 
     /**

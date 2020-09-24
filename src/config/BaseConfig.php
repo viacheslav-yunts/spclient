@@ -437,7 +437,7 @@ abstract class BaseConfig
 
     /**
      * @param array $parameters
-     * 
+     *
      * @return mixed
      */
     abstract public function getConfig(array $parameters);
