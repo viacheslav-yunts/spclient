@@ -135,7 +135,16 @@ class HttpRequestHandler
 
         if (! $httpResponse = curl_exec($curlHandle)) {
 
-            $curlError = curl_error($curlHandle);
+            $curlErrorNo = curl_errno($curlHandle);
+            switch ($curlErrorNo) {
+                case 28 :
+                    // curl timeout
+                    $curlError = 'Ошибка! Запрос не был обработан. [' . $this->_config->getTimeout() . ' sec]';
+                    break;
+                default :
+                    $curlError = curl_error($curlHandle);
+                    break;
+            }
             $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 403 ' . (is_string($curlError) ? $curlError : 'Forbidden'), $curlError, $this->_request);
 
         } else {
