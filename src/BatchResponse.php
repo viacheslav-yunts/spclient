@@ -62,7 +62,6 @@ class BatchResponse extends AbstractResponse
                 $parts = array_slice(explode($matches[1], $body), 1);
 
                 foreach ($parts as $part) {
-                    $part_body = '';
                     // If this is the last part, break
                     if ($part == "--\r\n") {
                         break;
@@ -70,9 +69,9 @@ class BatchResponse extends AbstractResponse
 
                     // Separate content from headers
                     $part = ltrim($part, "\r\n");
-                    list($part_headers, $raw_body) = explode("\r\n\r\n", substr($part, strpos($part, 'HTTP/1')), 2);
+                    list($part_headers, $part_body) = explode("\r\n\r\n", substr($part, strpos($part, 'HTTP/1')), 2);
 
-                    $raw_body = explode("\r\n", $raw_body);
+                    $raw_body = explode("\r\n", $part_body);
                     if (!empty($raw_body)) {
                         foreach ($raw_body as $str) {
                             if (isJson($str)) {
