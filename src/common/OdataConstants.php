@@ -18,5 +18,6 @@ class OdataConstants
     const CONTENT_TYPE_DEFAULT = 'application/json';
 
     const APPLICATION_JSON = 'application/json';
+    const APPLICATION_HTTP = 'application/http';
     const TEXT_PLAIN = 'text/plain';
 }

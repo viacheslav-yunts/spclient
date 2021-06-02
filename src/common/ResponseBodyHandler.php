@@ -10,13 +10,14 @@ class ResponseBodyHandler
     public static function parse($request_type, $content)
     {
 
-        switch (self :: checkRequestType($request_type)) {
+        switch (self:: checkRequestType($request_type)) {
 
             case OdataConstants::APPLICATION_JSON :
                 $content = JsonParser::parse($content);
                 break;
 
             case OdataConstants::TEXT_PLAIN :
+            case OdataConstants::APPLICATION_HTTP :
             default :
                 $content = TxtParser::parse($content);
                 break;
