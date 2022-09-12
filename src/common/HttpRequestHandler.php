@@ -139,7 +139,10 @@ class HttpRequestHandler
             switch ($curlErrorNo) {
                 case 28 :
                     // curl timeout
-                    $curlError = 'Ошибка! Запрос не был обработан. [' . $this->_config->getTimeout() . ' sec]';
+                    $curlError = mb_stripos(curl_error($curlHandle), 'connection') !== false
+                        ? 'Ошибка! Запрос не был обработан. [Соединение не установлено]'
+                        : 'Ошибка! Запрос не был обработан. [' . $this->_config->getTimeout() . ' sec]';
+
                     $statusCode = 504;
                     break;
                 default :
