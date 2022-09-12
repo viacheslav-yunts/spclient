@@ -110,7 +110,7 @@ class HttpRequestHandler
             curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $headers);
         }
         curl_setopt($curlHandle, CURLOPT_USERAGENT, 'ARMTEK USER AGENT');
-        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($curlHandle, CURLOPT_CONNECTTIMEOUT, $this->_config->getConnectionTimeout());
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, $this->_config->getTimeout());
         curl_setopt($curlHandle, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
