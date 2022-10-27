@@ -55,6 +55,11 @@ abstract class BaseConfig
     protected $timeout;
 
     /**
+     * @var int
+     */
+    protected $connectionTimeout = 2;
+
+    /**
      * @var string
      */
     protected $cookies_path;
@@ -254,6 +259,24 @@ abstract class BaseConfig
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getConnectionTimeout()
+    {
+        return $this->connectionTimeout;
+    }
+
+    /**
+     * @param $connectionTimeout
+     * @return $this
+     */
+    public function setConnectionTimeout($connectionTimeout)
+    {
+        $this->connectionTimeout = $connectionTimeout;
         return $this;
     }
 
