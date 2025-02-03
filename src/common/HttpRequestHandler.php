@@ -142,15 +142,12 @@ class HttpRequestHandler
                     $curlError = mb_stripos(curl_error($curlHandle), 'connection') !== false
                         ? 'Ошибка! Запрос не был обработан. [Соединение не установлено]'
                         : 'Ошибка! Запрос не был обработан. [' . $this->_config->getTimeout() . ' sec]';
-
-                    $statusCode = 504;
                     break;
                 default :
                     $curlError = curl_error($curlHandle);
-                    $statusCode = 403;
                     break;
             }
-            $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 ' . $statusCode . ' ' . (is_string($curlError) ? $curlError : 'Forbidden'), $curlError, $this->_request);
+            $response = HttpResponseHandler::parse($this->_request_type, 'HTTP/1.0 403 ' . (is_string($curlError) ? $curlError : 'Forbidden'), $curlError, $this->_request);
 
         } else {
 
