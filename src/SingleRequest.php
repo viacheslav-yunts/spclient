@@ -94,7 +94,7 @@ class SingleRequest implements IRequest
      */
     public function constructUrl()
     {
-        return 'http://' . $this->_config->getServer() . $this->_config->getServicePrefix() . $this->drawUrl() . '?' . $this->getSystemQueryOptionsToString();
+        return $this->_config->getProtocol() . '://' . $this->_config->getServer() . $this->_config->getServicePrefix() . $this->drawUrl() . '?' . $this->getSystemQueryOptionsToString();
     }
 
     /**

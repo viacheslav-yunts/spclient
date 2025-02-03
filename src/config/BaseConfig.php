@@ -42,6 +42,11 @@ abstract class BaseConfig
     /**
      * @var string
      */
+    protected $protocol = 'http';
+
+    /**
+     * @var string
+     */
     protected $login;
 
     /**
@@ -437,6 +442,17 @@ abstract class BaseConfig
     public function setServicePrefix(string $prefix)
     {
         $this->service_prefix = $prefix;
+        return $this;
+    }
+
+    public function getProtocol(): string
+    {
+        return $this->protocol;
+    }
+
+    public function setProtocol(string $protocol)
+    {
+        $this->protocol = $protocol;
         return $this;
     }
 
