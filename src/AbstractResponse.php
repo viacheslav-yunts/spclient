@@ -142,7 +142,7 @@ abstract class AbstractResponse
         if ($this->getHttpCode() == '500') {
             $this->setMessages(
                 (object)[
-                    'message' => 'В работе сервисов произошла исключительная ситуация, препятствующая возвращению результатов. В случае ее повторения обратитесь к оператору',
+                    'message' => 'An exceptional situation has occurred in the work of the services, preventing the return of results. If it happens again, contact the operator.',
                     'severity' => 'abort',
                 ]
             );

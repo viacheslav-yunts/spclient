@@ -114,15 +114,15 @@ class ConfigFactory
                         }
 
                     } else {
-                        throw new \Exception("Рсширение файла $fileExtension не входит в список допустимых расширений конфигурационных файлов");
+                        throw new \Exception("File extension $fileExtension it is not included in the list of acceptable configuration file extensions.");
                     }
 
                 } else {
-                    throw new \Exception("Не установленно расширение конфигурационного файла");
+                    throw new \Exception("The configuration file extension is not installed.");
                 }
 
             } else {
-                throw new \Exception("Не найден конфигурационный файл");
+                throw new \Exception("The configuration file was not found.");
             }
 
         }
@@ -154,7 +154,7 @@ class ConfigFactory
             return $this->getConfigFromFile($this->getConfigurationResource(), $configObject);
 
         } else {
-            throw new \Exception("Класс $configClassName (config object) не найден");
+            throw new \Exception("Class $configClassName (config object) not found");
         }
     }
 
@@ -194,7 +194,7 @@ class ConfigFactory
         if ($defaultConnection) {
             return $configObject->getConfig($defaultConnection);
         } else {
-            throw new \Exception('Не установлено дефолтное соединение для системы ' . $this->getSystem() . ' и типа соединения ' . $this->getConnectionType());
+            throw new \Exception('The default connection for the ' . $this->getSystem() . ' system has not been established and the type of ' . $this->getConnectionType() . ' connection');
         }
     }
 

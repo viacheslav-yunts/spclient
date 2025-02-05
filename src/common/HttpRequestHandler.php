@@ -141,8 +141,8 @@ class HttpRequestHandler
                 case 28 :
                     // curl timeout
                     $curlError = mb_stripos(curl_error($curlHandle), 'connection') !== false
-                        ? 'Ошибка! Запрос не был обработан. [Соединение не установлено]'
-                        : 'Ошибка! Запрос не был обработан. [' . $this->_config->getTimeout() . ' sec]';
+                        ? 'Error! The request was not processed. [The connection is not established]'
+                        : 'Error! The request was not processed. [' . $this->_config->getTimeout() . ' sec]';
                     break;
                 default :
                     $curlError = curl_error($curlHandle);

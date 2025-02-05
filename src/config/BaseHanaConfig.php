@@ -30,6 +30,6 @@ class BaseHanaConfig extends BaseConfig
             return $this;
         }
 
-        throw new \Exception("Непройдена валидация конфигурационных параметров");
+        throw new \Exception("Validation of configuration parameters failed");
     }
 }
